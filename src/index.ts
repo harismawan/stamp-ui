@@ -71,7 +71,7 @@ export {
   type AvatarProps,
   type AvatarGroupProps,
 } from './components/Avatar';
-// export { Stat } from './components/Stat';
+export { Stat, type StatProps, type StatDeltaType } from './components/Stat';
 // export { EmptyState } from './components/EmptyState';
 // export { Divider } from './components/Divider';
 // export { Progress } from './components/Progress';
