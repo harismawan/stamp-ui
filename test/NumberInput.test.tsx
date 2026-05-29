@@ -23,6 +23,19 @@ describe('NumberInput', () => {
     expect(last.target.value).toBe('1234567');
   });
 
+  it('drops the fractional part of a decimal value instead of merging digits', () => {
+    // Regression: parseRaw used to strip the '.' and concatenate, turning
+    // 1234.56 into "123456" and displaying "123.456". This field is
+    // integer-only, so the fractional part must be discarded -> 1234 -> "1.234".
+    renderWithTheme(<NumberInput value="1234.56" onChange={() => {}} aria-label="amount" />);
+    expect((screen.getByLabelText('amount') as HTMLInputElement).value).toBe('1.234');
+  });
+
+  it('drops the fractional part for a numeric (non-string) decimal value', () => {
+    renderWithTheme(<NumberInput value={1234.56} onChange={() => {}} aria-label="amount" />);
+    expect((screen.getByLabelText('amount') as HTMLInputElement).value).toBe('1.234');
+  });
+
   it('respects a custom thousandSep', () => {
     renderWithTheme(
       <NumberInput value="1000000" thousandSep="," onChange={() => {}} aria-label="amount" />,
