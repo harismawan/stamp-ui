@@ -110,7 +110,7 @@ export {
   type GridProps,
   type ContainerProps,
 } from './components/layout';
-// export { Tooltip } from './components/Tooltip';
+export { Tooltip, type TooltipProps } from './components/Tooltip';
 // export { Popover } from './components/Popover';
 // export { Menu, MenuButton, MenuList, MenuItem } from './components/Menu';
 // export { Drawer } from './components/Drawer';
