@@ -55,7 +55,12 @@ export {
   type IconPickerProps,
 } from './components/IconPicker';
 export { Checkbox, type CheckboxProps } from './components/Checkbox';
-// export { Radio, RadioGroup } from './components/Radio';
+export {
+  Radio,
+  RadioGroup,
+  type RadioProps,
+  type RadioGroupProps,
+} from './components/Radio';
 // export { Switch } from './components/Switch';
 // export { Slider } from './components/Slider';
 // export { Badge } from './components/Badge';
