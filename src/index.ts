@@ -63,7 +63,7 @@ export {
 } from './components/Radio';
 export { Switch, type SwitchProps } from './components/Switch';
 export { Slider, type SliderProps } from './components/Slider';
-// export { Badge } from './components/Badge';
+export { Badge, type BadgeProps, type BadgeVariant } from './components/Badge';
 // export { Tag } from './components/Tag';
 // export { Avatar, AvatarGroup } from './components/Avatar';
 // export { Stat } from './components/Stat';
