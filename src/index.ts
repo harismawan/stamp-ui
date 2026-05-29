@@ -138,6 +138,6 @@ export {
   type BreadcrumbProps,
   type BreadcrumbItemProps,
 } from './components/Breadcrumb';
-// export { Pagination } from './components/Pagination';
+export { Pagination, type PaginationProps } from './components/Pagination';
 // export { Stepper } from './components/Stepper';
 // export { Table, THead, TBody, Tr, Th, Td } from './components/Table';
