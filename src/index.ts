@@ -5,7 +5,10 @@ export { StampProvider, type StampProviderProps } from './provider';
 
 // ── Hooks ────────────────────────────────────────────────────────────────
 export { useThemeStore, type ThemeMode } from './hooks/useThemeStore';
-// export { useDisclosure } from './hooks/useDisclosure';
+export {
+  useDisclosure,
+  type UseDisclosureReturn,
+} from './hooks/useDisclosure';
 // export { useClickOutside } from './hooks/useClickOutside';
 
 // ── Components ─────────────────────────────────────────────────────────────
