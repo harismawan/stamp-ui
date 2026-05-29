@@ -9,7 +9,7 @@ export { useThemeStore, type ThemeMode } from './hooks/useThemeStore';
 // export { useClickOutside } from './hooks/useClickOutside';
 
 // ── Components ─────────────────────────────────────────────────────────────
-export { Button, type ButtonProps } from './components/Button';
+export { Button } from './components/Button';
 // export { Card, CardTitle, CardValue } from './components/Card';
 // export {
 //   Input,

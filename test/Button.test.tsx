@@ -1,8 +1,10 @@
-import { describe, it, expect, mock } from 'bun:test';
-import { screen } from '@testing-library/react';
+import { describe, it, expect, mock, afterEach } from 'bun:test';
+import { screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util.tsx';
-import { Button } from '../src/components/Button.tsx';
+import { renderWithTheme } from './util';
+import { Button } from '../src/components/Button';
+
+afterEach(() => cleanup());
 
 describe('Button', () => {
   it('renders its children', () => {
