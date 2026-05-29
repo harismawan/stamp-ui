@@ -145,4 +145,4 @@ export {
   type StepperProps,
   type StepperOrientation,
 } from './components/Stepper';
-// export { Table, THead, TBody, Tr, Th, Td } from './components/Table';
+export { Table, THead, TBody, Tr, Th, Td } from './components/Table';
