@@ -1,9 +1,17 @@
 import { describe, it, expect, mock, afterEach } from 'bun:test';
 import { screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+// Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
+// `allowImportingTsExtensions`, so `.tsx` import suffixes fail TS5097 there.
 import { renderWithTheme } from './util';
 import { Button } from '../src/components/Button';
 
+// happy-dom is registered once for the whole `bun test` run (test/setup.ts),
+// so every file shares one global `document`. These tests query via the global
+// `screen`, which scans the entire document; without unmounting after each
+// test, renders from sibling tests/files accumulate and `getByRole` throws
+// "Found multiple elements" in the full suite (passes in isolation). cleanup()
+// keeps the shared DOM single-tree.
 afterEach(() => cleanup());
 
 describe('Button', () => {

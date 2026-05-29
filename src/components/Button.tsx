@@ -82,15 +82,7 @@ const variantMap = {
 export const Button = styled.button.attrs<ButtonProps>((p) =>
   (p as { as?: unknown }).as === 'a'
     ? {}
-    : {
-        // styled-components v6 narrows `type` to the button literal union, so a
-        // bare `string` from the spread is not assignable. Default to 'button'
-        // while preserving any caller-provided literal value.
-        type: ((p as { type?: 'button' | 'submit' | 'reset' }).type ?? 'button') as
-          | 'button'
-          | 'submit'
-          | 'reset',
-      },
+    : { type: (p as { type?: 'button' | 'submit' | 'reset' }).type ?? 'button' },
 )<ButtonProps>`
   display: inline-flex;
   align-items: center;
