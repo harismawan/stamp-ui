@@ -32,7 +32,11 @@ export {
   type SkeletonGroupProps,
 } from './components/Skeleton';
 export { Modal, type ModalProps } from './components/Modal';
-// export { confirmDialog, ConfirmViewport } from './components/ConfirmDialog';
+export {
+  confirmDialog,
+  ConfirmViewport,
+  type ConfirmOptions,
+} from './components/ConfirmDialog';
 // export { toast, useToastStore, ToastViewport } from './components/Toast';
 // export { ColorPicker } from './components/ColorPicker';
 // export { IconPicker } from './components/IconPicker';
