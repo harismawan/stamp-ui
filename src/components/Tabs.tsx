@@ -200,7 +200,10 @@ export function Tab({ value, children, onClick, onKeyDown, ...rest }: TabProps) 
 }
 
 const StyledTabPanel = styled.div`
-  outline: none;
+  &:focus-visible {
+    outline: 2px solid ${(p) => p.theme.colors.border};
+    outline-offset: 2px;
+  }
 `;
 
 export interface TabPanelProps
