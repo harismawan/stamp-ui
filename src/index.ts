@@ -49,7 +49,11 @@ export {
   DEFAULT_SWATCHES,
   type ColorPickerProps,
 } from './components/ColorPicker';
-// export { IconPicker } from './components/IconPicker';
+export {
+  IconPicker,
+  DEFAULT_ICONS,
+  type IconPickerProps,
+} from './components/IconPicker';
 // export { Checkbox } from './components/Checkbox';
 // export { Radio, RadioGroup } from './components/Radio';
 // export { Switch } from './components/Switch';
