@@ -89,7 +89,12 @@ export {
   type TabProps,
   type TabPanelProps,
 } from './components/Tabs';
-// export { Accordion, AccordionItem } from './components/Accordion';
+export {
+  Accordion,
+  AccordionItem,
+  type AccordionProps,
+  type AccordionItemProps,
+} from './components/Accordion';
 // export {
 //   Box,
 //   Stack,
