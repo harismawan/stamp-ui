@@ -168,4 +168,27 @@ export const darkTheme = {
   easing,
 };
 
-export type Theme = typeof lightTheme;
+/**
+ * Public theme contract. Color/shadow values are intentionally widened to
+ * `string` so both `lightTheme` and `darkTheme` satisfy the same shape — if
+ * they were inferred from `lightTheme` via `typeof`, the `as const` palette
+ * would pin each value to a narrow string literal (e.g. `"#FFF6BF"`) and
+ * `darkTheme` would NOT be assignable to `Theme`.
+ */
+export type Theme = {
+  mode: string;
+  colors: Record<keyof typeof lightTheme.colors, string>;
+  radii: typeof radii;
+  space: typeof space;
+  font: typeof font;
+  shadow: Record<keyof typeof shadow, string>;
+  easing: typeof easing;
+};
+
+// Lock the contract: both exports must structurally satisfy `Theme`. These
+// static assertions fail `tsc` if either theme drifts from the shared shape
+// (the regression the literal-narrowing `typeof lightTheme` could not catch).
+const _lightContract: Theme = lightTheme;
+const _darkContract: Theme = darkTheme;
+void _lightContract;
+void _darkContract;

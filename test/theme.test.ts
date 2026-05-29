@@ -1,6 +1,17 @@
 import { expect, test } from 'bun:test';
 import { darkTheme, lightTheme, type Theme } from '../src/theme';
 
+// Static contract lock (checked by `tsc`, not at runtime): both themes must be
+// assignable to the public `Theme` type. This catches the literal-narrowing
+// regression where `Theme = typeof lightTheme` pinned colors to light-theme
+// string literals (e.g. "#FFF6BF") and `darkTheme` failed to compile.
+const _light: Theme = lightTheme;
+const _dark: Theme = darkTheme;
+lightTheme satisfies Theme;
+darkTheme satisfies Theme;
+void _light;
+void _dark;
+
 function deepKeys(obj: Record<string, unknown>, prefix = ''): string[] {
   return Object.entries(obj).flatMap(([k, v]) => {
     const path = prefix ? `${prefix}.${k}` : k;
