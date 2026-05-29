@@ -54,7 +54,7 @@ export {
   DEFAULT_ICONS,
   type IconPickerProps,
 } from './components/IconPicker';
-// export { Checkbox } from './components/Checkbox';
+export { Checkbox, type CheckboxProps } from './components/Checkbox';
 // export { Radio, RadioGroup } from './components/Radio';
 // export { Switch } from './components/Switch';
 // export { Slider } from './components/Slider';
