@@ -21,12 +21,15 @@ export {
 } from './components/Input';
 export { NumberInput, type NumberInputProps } from './components/NumberInput';
 export { Spinner, type SpinnerProps } from './components/Spinner';
-// export {
-//   Skeleton,
-//   SkeletonText,
-//   SkeletonCircle,
-//   SkeletonGroup,
-// } from './components/Skeleton';
+export {
+  Skeleton,
+  SkeletonText,
+  SkeletonCircle,
+  SkeletonGroup,
+  type SkeletonProps,
+  type SkeletonTextProps,
+  type SkeletonCircleProps,
+} from './components/Skeleton';
 // export { Modal } from './components/Modal';
 // export { confirmDialog, ConfirmViewport } from './components/ConfirmDialog';
 // export { toast, useToastStore, ToastViewport } from './components/Toast';
