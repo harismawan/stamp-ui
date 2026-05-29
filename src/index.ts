@@ -9,7 +9,7 @@ export {
   useDisclosure,
   type UseDisclosureReturn,
 } from './hooks/useDisclosure';
-// export { useClickOutside } from './hooks/useClickOutside';
+export { useClickOutside } from './hooks/useClickOutside';
 
 // ── Components ─────────────────────────────────────────────────────────────
 export { Button, type ButtonProps } from './components/Button';
