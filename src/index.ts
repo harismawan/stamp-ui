@@ -65,7 +65,12 @@ export { Switch, type SwitchProps } from './components/Switch';
 export { Slider, type SliderProps } from './components/Slider';
 export { Badge, type BadgeProps, type BadgeVariant } from './components/Badge';
 export { Tag, type TagProps } from './components/Tag';
-// export { Avatar, AvatarGroup } from './components/Avatar';
+export {
+  Avatar,
+  AvatarGroup,
+  type AvatarProps,
+  type AvatarGroupProps,
+} from './components/Avatar';
 // export { Stat } from './components/Stat';
 // export { EmptyState } from './components/EmptyState';
 // export { Divider } from './components/Divider';
