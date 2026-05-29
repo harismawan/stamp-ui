@@ -45,3 +45,35 @@ test('selecting a radio fires onChange with that value', async () => {
   expect(onChange).toHaveBeenCalledTimes(1);
   expect(onChange.mock.calls[0][0]).toBe('b');
 });
+
+test('disabled Radio is disabled and does not fire onChange when clicked', async () => {
+  const user = userEvent.setup();
+  const onChange = mock((v: string) => {});
+  renderWithTheme(
+    <RadioGroup name="plan" value="a" onChange={onChange}>
+      <Radio value="a" label="Plan A" />
+      <Radio value="b" label="Plan B" disabled />
+    </RadioGroup>,
+  );
+  const b = screen.getByLabelText('Plan B') as HTMLInputElement;
+  expect(b.disabled).toBe(true);
+  await user.click(b);
+  expect(onChange).not.toHaveBeenCalled();
+});
+
+test('arrow-key navigation moves selection to the next radio and fires onChange', async () => {
+  const user = userEvent.setup();
+  const onChange = mock((v: string) => {});
+  renderWithTheme(
+    <RadioGroup name="plan" value="a" onChange={onChange}>
+      <Radio value="a" label="Plan A" />
+      <Radio value="b" label="Plan B" />
+    </RadioGroup>,
+  );
+  const a = screen.getByLabelText('Plan A') as HTMLInputElement;
+  a.focus();
+  expect(document.activeElement).toBe(a);
+  await user.keyboard('{ArrowDown}');
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange.mock.calls[0][0]).toBe('b');
+});

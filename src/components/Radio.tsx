@@ -93,24 +93,29 @@ const Dot = styled.span<{ $checked: boolean }>`
   }
 `;
 
-export const Radio: React.FC<RadioProps> = ({ value, label, disabled }) => {
-  const ctx = React.useContext(RadioGroupContext);
-  if (ctx == null) {
-    throw new Error('Radio must be used within a RadioGroup');
-  }
-  const checked = ctx.value === value;
-  return (
-    <Root $disabled={disabled}>
-      <HiddenInput
-        type="radio"
-        name={ctx.name}
-        value={value}
-        checked={checked}
-        disabled={disabled}
-        onChange={() => ctx.onChange(value)}
-      />
-      <Dot $checked={checked} aria-hidden="true" />
-      <span>{label}</span>
-    </Root>
-  );
-};
+export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
+  ({ value, label, disabled }, ref) => {
+    const ctx = React.useContext(RadioGroupContext);
+    if (ctx == null) {
+      throw new Error('Radio must be used within a RadioGroup');
+    }
+    const checked = ctx.value === value;
+    return (
+      <Root $disabled={disabled}>
+        <HiddenInput
+          ref={ref}
+          type="radio"
+          name={ctx.name}
+          value={value}
+          checked={checked}
+          disabled={disabled}
+          onChange={() => ctx.onChange(value)}
+        />
+        <Dot $checked={checked} aria-hidden="true" />
+        <span>{label}</span>
+      </Root>
+    );
+  },
+);
+
+Radio.displayName = 'Radio';
