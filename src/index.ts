@@ -20,7 +20,7 @@ export {
   FieldError,
 } from './components/Input';
 export { NumberInput, type NumberInputProps } from './components/NumberInput';
-// export { Spinner } from './components/Spinner';
+export { Spinner, type SpinnerProps } from './components/Spinner';
 // export {
 //   Skeleton,
 //   SkeletonText,
