@@ -64,7 +64,7 @@ export {
 export { Switch, type SwitchProps } from './components/Switch';
 export { Slider, type SliderProps } from './components/Slider';
 export { Badge, type BadgeProps, type BadgeVariant } from './components/Badge';
-// export { Tag } from './components/Tag';
+export { Tag, type TagProps } from './components/Tag';
 // export { Avatar, AvatarGroup } from './components/Avatar';
 // export { Stat } from './components/Stat';
 // export { EmptyState } from './components/EmptyState';
