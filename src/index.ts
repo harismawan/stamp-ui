@@ -31,7 +31,7 @@ export {
   type SkeletonCircleProps,
   type SkeletonGroupProps,
 } from './components/Skeleton';
-// export { Modal } from './components/Modal';
+export { Modal, type ModalProps } from './components/Modal';
 // export { confirmDialog, ConfirmViewport } from './components/ConfirmDialog';
 // export { toast, useToastStore, ToastViewport } from './components/Toast';
 // export { ColorPicker } from './components/ColorPicker';
