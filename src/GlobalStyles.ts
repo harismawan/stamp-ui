@@ -26,7 +26,16 @@ export const GlobalStyles = createGlobalStyle`
     color: ${(p) => p.theme.colors.accentDark};
     text-decoration: none;
     transition: color 120ms ${(p) => p.theme.easing.out};
-    &:hover { color: ${(p) => p.theme.colors.primaryHover}; }
+    /*
+     * Hover uses the body text color (theme-aware: ink on cream ~18:1,
+     * cream-white on dark ~17:1), so links stay highly readable on interaction.
+     * The previous primaryHover (bright yellow #FFCB05) dropped to ~1.5:1 on the
+     * cream bg — illegible. An underline provides a non-color affordance too.
+     */
+    &:hover {
+      color: ${(p) => p.theme.colors.text};
+      text-decoration: underline;
+    }
   }
 
   button {

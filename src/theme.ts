@@ -15,6 +15,10 @@ const palette = {
   // Coral accent (fun callouts, error).
   coral: '#FF6B6B',
   coralSoft: '#FFE0E0',
+  // Deep coral for links on the light cream bg — #A33636 hits ~6.5:1 against
+  // cream (#FFFCF0), clearing WCAG AA for normal text. The lighter #D94F4F
+  // only reaches ~3.9:1 on cream and is reserved for the dark theme.
+  coralLink: '#A33636',
 
   // Mint income.
   mint: '#1FAB6E',
@@ -87,7 +91,7 @@ export const lightTheme = {
     primaryInk: palette.ink,
 
     accent: palette.coral,
-    accentDark: '#D94F4F',
+    accentDark: palette.coralLink,
 
     income: palette.mint,
     incomeSoft: palette.mintSoft,
