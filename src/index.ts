@@ -10,7 +10,7 @@ export { useThemeStore, type ThemeMode } from './hooks/useThemeStore';
 
 // ── Components ─────────────────────────────────────────────────────────────
 export { Button, type ButtonProps } from './components/Button';
-// export { Card, CardTitle, CardValue } from './components/Card';
+export { Card, CardTitle, CardValue, type CardProps } from './components/Card';
 // export {
 //   Input,
 //   Select,
