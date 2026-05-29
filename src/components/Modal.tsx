@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import styled from 'styled-components';
 
 export interface ModalProps {
@@ -95,6 +95,9 @@ const CloseBtn = styled.button`
 `;
 
 export function Modal({ open, onClose, title, size = 'md', children }: ModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -104,12 +107,26 @@ export function Modal({ open, onClose, title, size = 'md', children }: ModalProp
     return () => document.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (open && panelRef.current) {
+      panelRef.current.focus();
+    }
+  }, [open]);
+
   if (!open) return null;
   return (
     <Overlay onClick={() => onClose?.()}>
-      <Panel $size={size} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+      <Panel
+        ref={panelRef}
+        $size={size}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+      >
         <Header>
-          <Title>{title}</Title>
+          <Title id={titleId}>{title}</Title>
           <CloseBtn type="button" onClick={() => onClose?.()} aria-label="Close">
             <X size={16} strokeWidth={2.5} />
           </CloseBtn>

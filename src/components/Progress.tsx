@@ -57,7 +57,7 @@ export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
         {label != null ? <Label>{label}</Label> : null}
         <Track
           role="progressbar"
-          aria-valuenow={value}
+          aria-valuenow={clamped}
           aria-valuemin={0}
           aria-valuemax={max}
           aria-label={label}

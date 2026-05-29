@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, useTheme } from 'styled-components';
 
 export interface SpinnerProps extends React.ComponentPropsWithoutRef<'span'> {
   size?: number;
@@ -60,6 +60,7 @@ const SEGMENTS = [
 ];
 
 export function Spinner({ size = 18, thickness = 3, label = 'Loading', ...rest }: SpinnerProps) {
+  const theme = useTheme();
   const rOuter = 28;
   const rInner = rOuter - (thickness / size) * 64 * 1.6;
   const innerR = Math.max(10, rInner);
@@ -75,7 +76,7 @@ export function Spinner({ size = 18, thickness = 3, label = 'Loading', ...rest }
             key={i}
             d={wedge(seg.from + GAP / 2, seg.to - GAP / 2, rOuter, innerR)}
             fill={palette[i]}
-            stroke="#111"
+            stroke={theme.colors.border}
             strokeWidth={strokeW}
             strokeLinejoin="round"
           />

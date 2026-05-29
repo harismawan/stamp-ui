@@ -106,6 +106,67 @@ describe('Tabs', () => {
     expect(current).toBe('a');
   });
 
+  it('ArrowRight skips a disabled tab', () => {
+    let current = 'a';
+    function Stateful() {
+      const [v, setV] = (require('react') as typeof import('react')).useState('a');
+      current = v;
+      return (
+        <Tabs value={v} onChange={setV}>
+          <TabList aria-label="x">
+            <Tab value="a">First</Tab>
+            <Tab value="b" disabled>
+              Second
+            </Tab>
+            <Tab value="c">Third</Tab>
+          </TabList>
+          <TabPanel value="a">Panel A</TabPanel>
+          <TabPanel value="b">Panel B</TabPanel>
+          <TabPanel value="c">Panel C</TabPanel>
+        </Tabs>
+      );
+    }
+    renderWithTheme(<Stateful />);
+    const first = screen.getByRole('tab', { name: 'First' });
+    first.focus();
+    fireEvent.keyDown(first, { key: 'ArrowRight' });
+    // Middle tab is disabled, so selection jumps to the third.
+    expect(current).toBe('c');
+  });
+
+  it('Home and End land on the first/last enabled tab', () => {
+    let current = 'b';
+    function Stateful() {
+      const [v, setV] = (require('react') as typeof import('react')).useState('b');
+      current = v;
+      return (
+        <Tabs value={v} onChange={setV}>
+          <TabList aria-label="x">
+            <Tab value="a" disabled>
+              First
+            </Tab>
+            <Tab value="b">Second</Tab>
+            <Tab value="c" disabled>
+              Third
+            </Tab>
+          </TabList>
+          <TabPanel value="a">Panel A</TabPanel>
+          <TabPanel value="b">Panel B</TabPanel>
+          <TabPanel value="c">Panel C</TabPanel>
+        </Tabs>
+      );
+    }
+    renderWithTheme(<Stateful />);
+    const second = screen.getByRole('tab', { name: 'Second' });
+    second.focus();
+    fireEvent.keyDown(second, { key: 'Home' });
+    // First tab is disabled, so Home lands on the first enabled tab (Second).
+    expect(current).toBe('b');
+    fireEvent.keyDown(second, { key: 'End' });
+    // Last tab is disabled, so End lands on the last enabled tab (Second).
+    expect(current).toBe('b');
+  });
+
   it('ArrowLeft moves selection to the previous tab and wraps', () => {
     let current = 'a';
     function Stateful() {

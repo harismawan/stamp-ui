@@ -34,6 +34,16 @@ test('Progress clamps values above max to 100%', () => {
   expect(screen.getByTestId('progress-fill').style.width).toBe('100%');
 });
 
+test('Progress clamps aria-valuenow above max to the max', () => {
+  renderWithTheme(<Progress value={150} max={100} />);
+  expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('100');
+});
+
+test('Progress clamps aria-valuenow below zero to zero', () => {
+  renderWithTheme(<Progress value={-20} max={100} />);
+  expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('0');
+});
+
 test('Progress renders an optional label', () => {
   renderWithTheme(<Progress value={40} label="Loading" />);
   expect(screen.getByText('Loading')).toBeTruthy();

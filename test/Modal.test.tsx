@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, mock } from 'bun:test';
-import { cleanup, screen } from '@testing-library/react';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Modal } from '../src/components/Modal';
 // Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
@@ -30,6 +30,29 @@ describe('Modal', () => {
     expect(dialog.getAttribute('aria-modal')).toBe('true');
     expect(screen.getByText('Hi')).toBeTruthy();
     expect(screen.getByText('body content')).toBeTruthy();
+  });
+
+  it('derives the dialog accessible name from the title', () => {
+    renderWithTheme(
+      <Modal open onClose={() => {}} title="Demo">
+        body content
+      </Modal>,
+    );
+    // getByRole with a name option only matches if aria-labelledby resolves
+    // to the title text.
+    expect(screen.getByRole('dialog', { name: 'Demo' })).toBeTruthy();
+  });
+
+  it('moves focus into the panel when opened', async () => {
+    renderWithTheme(
+      <Modal open onClose={() => {}} title="Demo">
+        body content
+      </Modal>,
+    );
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog');
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    });
   });
 
   it('fires onClose when Escape is pressed', async () => {

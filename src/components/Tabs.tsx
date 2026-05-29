@@ -11,11 +11,12 @@ interface TabsContextValue {
   value: string;
   onChange: (value: string) => void;
   baseId: string;
-  register: (value: string) => void;
+  register: (value: string, disabled: boolean) => void;
   unregister: (value: string) => void;
   focusByValue: (value: string) => void;
   setTabRef: (value: string, el: HTMLButtonElement | null) => void;
   getOrderedValues: () => string[];
+  isDisabled: (value: string) => boolean;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -46,17 +47,23 @@ export function Tabs({ value, onChange, children }: TabsProps) {
   // Preserve registration order of tab values for arrow navigation.
   const orderRef = useRef<string[]>([]);
   const refsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
+  // Track each tab's disabled state so arrow navigation can skip disabled tabs.
+  const disabledRef = useRef<Map<string, boolean>>(new Map());
 
-  const register = useCallback((v: string) => {
+  const register = useCallback((v: string, disabled: boolean) => {
     if (!orderRef.current.includes(v)) {
       orderRef.current = [...orderRef.current, v];
     }
+    disabledRef.current.set(v, disabled);
   }, []);
 
   const unregister = useCallback((v: string) => {
     orderRef.current = orderRef.current.filter((x) => x !== v);
     refsRef.current.delete(v);
+    disabledRef.current.delete(v);
   }, []);
+
+  const isDisabled = useCallback((v: string) => disabledRef.current.get(v) === true, []);
 
   const setTabRef = useCallback((v: string, el: HTMLButtonElement | null) => {
     if (el) {
@@ -83,8 +90,9 @@ export function Tabs({ value, onChange, children }: TabsProps) {
       focusByValue,
       setTabRef,
       getOrderedValues,
+      isDisabled,
     }),
-    [value, onChange, register, unregister, focusByValue, setTabRef, getOrderedValues],
+    [value, onChange, register, unregister, focusByValue, setTabRef, getOrderedValues, isDisabled],
   );
 
   return <TabsContext.Provider value={ctx}>{children}</TabsContext.Provider>;
@@ -142,14 +150,14 @@ export interface TabProps
   children: React.ReactNode;
 }
 
-export function Tab({ value, children, onClick, onKeyDown, ...rest }: TabProps) {
+export function Tab({ value, children, onClick, onKeyDown, disabled, ...rest }: TabProps) {
   const ctx = useTabsContext('Tab');
   const active = ctx.value === value;
 
   React.useEffect(() => {
-    ctx.register(value);
+    ctx.register(value, disabled === true);
     return () => ctx.unregister(value);
-  }, [ctx, value]);
+  }, [ctx, value, disabled]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onClick?.(e);
@@ -162,18 +170,41 @@ export function Tab({ value, children, onClick, onKeyDown, ...rest }: TabProps) 
     const order = ctx.getOrderedValues();
     const idx = order.indexOf(value);
     if (idx === -1) return;
+
+    // Step over disabled tabs in the given direction (wrapping), so arrow
+    // navigation never lands on a disabled tab. Returns null if no enabled
+    // tab exists in that direction.
+    const seekEnabled = (start: number, step: number): number | null => {
+      for (let i = 1; i <= order.length; i += 1) {
+        const candidate = (start + step * i + order.length * order.length) % order.length;
+        if (!ctx.isDisabled(order[candidate])) return candidate;
+      }
+      return null;
+    };
+    // Scan from one end inward for the first/last enabled tab (Home/End).
+    const firstEnabled = (step: number): number | null => {
+      const begin = step > 0 ? 0 : order.length - 1;
+      for (let i = 0; i < order.length; i += 1) {
+        const candidate = begin + step * i;
+        if (!ctx.isDisabled(order[candidate])) return candidate;
+      }
+      return null;
+    };
+
     let nextIdx: number | null = null;
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      nextIdx = (idx + 1) % order.length;
+      nextIdx = seekEnabled(idx, 1);
     } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      nextIdx = (idx - 1 + order.length) % order.length;
+      nextIdx = seekEnabled(idx, -1);
     } else if (e.key === 'Home') {
-      nextIdx = 0;
+      nextIdx = firstEnabled(1);
     } else if (e.key === 'End') {
-      nextIdx = order.length - 1;
+      nextIdx = firstEnabled(-1);
+    } else {
+      return;
     }
+    e.preventDefault();
     if (nextIdx !== null) {
-      e.preventDefault();
       const nextValue = order[nextIdx];
       ctx.onChange(nextValue);
       ctx.focusByValue(nextValue);
@@ -188,6 +219,7 @@ export function Tab({ value, children, onClick, onKeyDown, ...rest }: TabProps) 
       aria-selected={active}
       aria-controls={`${ctx.baseId}-panel-${value}`}
       tabIndex={active ? 0 : -1}
+      disabled={disabled}
       $active={active}
       ref={(el) => ctx.setTabRef(value, el)}
       onClick={handleClick}
