@@ -19,7 +19,7 @@ export {
   FieldLabel,
   FieldError,
 } from './components/Input';
-// export { NumberInput } from './components/NumberInput';
+export { NumberInput, type NumberInputProps } from './components/NumberInput';
 // export { Spinner } from './components/Spinner';
 // export {
 //   Skeleton,
