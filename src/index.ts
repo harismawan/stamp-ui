@@ -122,7 +122,11 @@ export {
   type MenuListProps,
   type MenuItemProps,
 } from './components/DropdownMenu';
-// export { Drawer } from './components/Drawer';
+export {
+  Drawer,
+  type DrawerProps,
+  type DrawerSide,
+} from './components/Drawer';
 // export { Alert } from './components/Alert';
 // export { Breadcrumb, BreadcrumbItem } from './components/Breadcrumb';
 // export { Pagination } from './components/Pagination';
