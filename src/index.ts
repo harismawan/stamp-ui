@@ -11,14 +11,14 @@ export { useThemeStore, type ThemeMode } from './hooks/useThemeStore';
 // ── Components ─────────────────────────────────────────────────────────────
 export { Button, type ButtonProps } from './components/Button';
 export { Card, CardTitle, CardValue, type CardProps } from './components/Card';
-// export {
-//   Input,
-//   Select,
-//   Textarea,
-//   FieldWrap,
-//   FieldLabel,
-//   FieldError,
-// } from './components/Input';
+export {
+  Input,
+  Select,
+  Textarea,
+  FieldWrap,
+  FieldLabel,
+  FieldError,
+} from './components/Input';
 // export { NumberInput } from './components/NumberInput';
 // export { Spinner } from './components/Spinner';
 // export {
