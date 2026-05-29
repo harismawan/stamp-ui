@@ -37,7 +37,13 @@ export {
   ConfirmViewport,
   type ConfirmOptions,
 } from './components/ConfirmDialog';
-// export { toast, useToastStore, ToastViewport } from './components/Toast';
+export {
+  toast,
+  useToastStore,
+  ToastViewport,
+  type ToastKind,
+  type ToastItem,
+} from './components/Toast';
 // export { ColorPicker } from './components/ColorPicker';
 // export { IconPicker } from './components/IconPicker';
 // export { Checkbox } from './components/Checkbox';
