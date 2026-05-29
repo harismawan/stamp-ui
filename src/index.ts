@@ -79,7 +79,16 @@ export {
   type ProgressProps,
   type ProgressVariant,
 } from './components/Progress';
-// export { Tabs, TabList, Tab, TabPanel } from './components/Tabs';
+export {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  type TabsProps,
+  type TabListProps,
+  type TabProps,
+  type TabPanelProps,
+} from './components/Tabs';
 // export { Accordion, AccordionItem } from './components/Accordion';
 // export {
 //   Box,
