@@ -44,7 +44,11 @@ export {
   type ToastKind,
   type ToastItem,
 } from './components/Toast';
-// export { ColorPicker } from './components/ColorPicker';
+export {
+  ColorPicker,
+  DEFAULT_SWATCHES,
+  type ColorPickerProps,
+} from './components/ColorPicker';
 // export { IconPicker } from './components/IconPicker';
 // export { Checkbox } from './components/Checkbox';
 // export { Radio, RadioGroup } from './components/Radio';
