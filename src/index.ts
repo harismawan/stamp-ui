@@ -73,7 +73,7 @@ export {
 } from './components/Avatar';
 export { Stat, type StatProps, type StatDeltaType } from './components/Stat';
 export { EmptyState, type EmptyStateProps } from './components/EmptyState';
-// export { Divider } from './components/Divider';
+export { Divider, type DividerProps } from './components/Divider';
 // export { Progress } from './components/Progress';
 // export { Tabs, TabList, Tab, TabPanel } from './components/Tabs';
 // export { Accordion, AccordionItem } from './components/Accordion';
