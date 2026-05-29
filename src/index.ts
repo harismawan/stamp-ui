@@ -29,6 +29,7 @@ export {
   type SkeletonProps,
   type SkeletonTextProps,
   type SkeletonCircleProps,
+  type SkeletonGroupProps,
 } from './components/Skeleton';
 // export { Modal } from './components/Modal';
 // export { confirmDialog, ConfirmViewport } from './components/ConfirmDialog';

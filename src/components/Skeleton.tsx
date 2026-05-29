@@ -12,6 +12,7 @@ export interface SkeletonProps {
 }
 
 export const Skeleton = styled.div.attrs<SkeletonProps>((p) => ({
+  'aria-hidden': p['aria-hidden'] ?? true,
   style: { width: p.$w ?? '100%', height: p.$h ?? '14px' },
 }))<SkeletonProps>`
   border-radius: ${(p) => p.theme.radii[p.$r ?? 'sm']};
@@ -26,7 +27,20 @@ export const Skeleton = styled.div.attrs<SkeletonProps>((p) => ({
   flex-shrink: 0;
 `;
 
-export const SkeletonGroup = styled.div<{ $gap?: string }>`
+// The container announces the loading state to assistive tech (mirrors the
+// Spinner's role="status" + aria-label convention). The shimmer placeholders
+// themselves are aria-hidden so they are not announced as meaningless content.
+export interface SkeletonGroupProps {
+  $gap?: string;
+  /** Status label announced to assistive tech (non-transient props would leak). */
+  $label?: string;
+}
+
+export const SkeletonGroup = styled.div.attrs<SkeletonGroupProps>((p) => ({
+  role: 'status',
+  'aria-busy': true,
+  'aria-label': p.$label ?? 'Loading',
+}))<SkeletonGroupProps>`
   display: flex;
   flex-direction: column;
   gap: ${(p) => p.$gap ?? p.theme.space[2]};
@@ -35,6 +49,8 @@ export const SkeletonGroup = styled.div<{ $gap?: string }>`
 
 export interface SkeletonTextProps extends React.ComponentPropsWithoutRef<'div'> {
   lines?: number;
+  /** Status label announced to assistive tech. */
+  $label?: string;
 }
 
 export function SkeletonText({ lines = 3, ...rest }: SkeletonTextProps) {
@@ -48,11 +64,11 @@ export function SkeletonText({ lines = 3, ...rest }: SkeletonTextProps) {
 }
 
 export interface SkeletonCircleProps extends React.ComponentPropsWithoutRef<'div'> {
-  size?: number;
+  $size?: number;
 }
 
 export const SkeletonCircle = styled(Skeleton).attrs<SkeletonCircleProps>((p) => ({
-  style: { width: `${p.size ?? 40}px`, height: `${p.size ?? 40}px` },
+  style: { width: `${p.$size ?? 40}px`, height: `${p.$size ?? 40}px` },
 }))<SkeletonCircleProps>`
   border-radius: ${(p) => p.theme.radii.pill};
 `;

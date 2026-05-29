@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'bun:test';
-import { render } from '@testing-library/react';
 import { renderWithTheme } from './util';
 import {
   Skeleton,
@@ -27,11 +26,51 @@ describe('Skeleton', () => {
     expect((container.querySelector('[data-testid="five"]') as HTMLElement).children.length).toBe(5);
   });
 
-  it('SkeletonCircle renders with equal width/height from size', () => {
-    const { container } = renderWithTheme(<SkeletonCircle size={48} data-testid="circ" />);
+  it('SkeletonCircle renders with equal width/height from $size', () => {
+    const { container } = renderWithTheme(<SkeletonCircle $size={48} data-testid="circ" />);
     const el = container.querySelector('[data-testid="circ"]') as HTMLElement;
     expect(el.style.width).toBe('48px');
     expect(el.style.height).toBe('48px');
+  });
+
+  it('SkeletonCircle does not leak its size prop to the DOM', () => {
+    const { container } = renderWithTheme(<SkeletonCircle $size={48} data-testid="circ" />);
+    const el = container.querySelector('[data-testid="circ"]') as HTMLElement;
+    // $size is transient and must be stripped; size is invalid on <div>.
+    expect(el.hasAttribute('size')).toBe(false);
+    expect(el.hasAttribute('$size')).toBe(false);
+  });
+
+  it('Skeleton placeholders are aria-hidden so they are not announced', () => {
+    const { container } = renderWithTheme(<Skeleton data-testid="sk2" />);
+    const el = container.querySelector('[data-testid="sk2"]') as HTMLElement;
+    expect(el.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('SkeletonGroup exposes a status role with aria-busy and a label', () => {
+    const { container } = renderWithTheme(
+      <SkeletonGroup data-testid="grp">
+        <Skeleton />
+        <Skeleton />
+      </SkeletonGroup>,
+    );
+    const grp = container.querySelector('[data-testid="grp"]') as HTMLElement;
+    expect(grp.getAttribute('role')).toBe('status');
+    expect(grp.getAttribute('aria-busy')).toBe('true');
+    expect(grp.getAttribute('aria-label')).toBe('Loading');
+  });
+
+  it('SkeletonText exposes status semantics and an overridable label', () => {
+    const { container } = renderWithTheme(
+      <SkeletonText $label="Loading profile" data-testid="txt" />,
+    );
+    const txt = container.querySelector('[data-testid="txt"]') as HTMLElement;
+    expect(txt.getAttribute('role')).toBe('status');
+    expect(txt.getAttribute('aria-busy')).toBe('true');
+    expect(txt.getAttribute('aria-label')).toBe('Loading profile');
+    // $label is transient and must not appear on the DOM node.
+    expect(txt.hasAttribute('$label')).toBe(false);
+    expect(txt.hasAttribute('label')).toBe(false);
   });
 
   it('SkeletonGroup renders its children', () => {
