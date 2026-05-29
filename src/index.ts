@@ -61,7 +61,7 @@ export {
   type RadioProps,
   type RadioGroupProps,
 } from './components/Radio';
-// export { Switch } from './components/Switch';
+export { Switch, type SwitchProps } from './components/Switch';
 // export { Slider } from './components/Slider';
 // export { Badge } from './components/Badge';
 // export { Tag } from './components/Tag';
