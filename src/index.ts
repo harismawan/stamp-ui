@@ -112,7 +112,16 @@ export {
 } from './components/layout';
 export { Tooltip, type TooltipProps } from './components/Tooltip';
 export { Popover, type PopoverProps } from './components/Popover';
-// export { Menu, MenuButton, MenuList, MenuItem } from './components/Menu';
+export {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  type MenuProps,
+  type MenuButtonProps,
+  type MenuListProps,
+  type MenuItemProps,
+} from './components/DropdownMenu';
 // export { Drawer } from './components/Drawer';
 // export { Alert } from './components/Alert';
 // export { Breadcrumb, BreadcrumbItem } from './components/Breadcrumb';
