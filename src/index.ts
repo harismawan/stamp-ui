@@ -127,7 +127,11 @@ export {
   type DrawerProps,
   type DrawerSide,
 } from './components/Drawer';
-// export { Alert } from './components/Alert';
+export {
+  Alert,
+  type AlertProps,
+  type AlertVariant,
+} from './components/Alert';
 // export { Breadcrumb, BreadcrumbItem } from './components/Breadcrumb';
 // export { Pagination } from './components/Pagination';
 // export { Stepper } from './components/Stepper';
