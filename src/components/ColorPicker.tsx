@@ -18,13 +18,37 @@ export interface ColorPickerProps {
   swatches?: string[];
 }
 
+// Relative luminance (WCAG-ish) of a hex color, 0 (black) .. 1 (white).
+// Used to pick a contrasting check-mark color on each swatch.
+function luminance(hex: string): number {
+  const m = hex.replace('#', '');
+  const full =
+    m.length === 3
+      ? m
+          .split('')
+          .map((c) => c + c)
+          .join('')
+      : m.padEnd(6, '0').slice(0, 6);
+  const r = parseInt(full.slice(0, 2), 16) / 255;
+  const g = parseInt(full.slice(2, 4), 16) / 255;
+  const b = parseInt(full.slice(4, 6), 16) / 255;
+  const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+// Dark swatches get a white check; light swatches get a near-black check so the
+// 'selected' indicator stays visible regardless of the swatch color.
+function checkColor(hex: string): string {
+  return luminance(hex) < 0.5 ? '#fff' : '#111';
+}
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: ${(p) => p.theme.space[2]};
 `;
 
-const Swatch = styled.button<{ $bg: string; $active: boolean }>`
+const Swatch = styled.button<{ $bg: string; $active: boolean; $check: string }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +56,7 @@ const Swatch = styled.button<{ $bg: string; $active: boolean }>`
   border-radius: ${(p) => p.theme.radii.sm};
   background: ${(p) => p.$bg};
   border: ${(p) => (p.$active ? '3px' : '2px')} solid ${(p) => p.theme.colors.border};
-  color: #111;
+  color: ${(p) => p.$check};
   cursor: pointer;
   transition: transform 80ms ${(p) => p.theme.easing.out};
   &:hover {
@@ -52,6 +76,7 @@ export function ColorPicker({ value, onChange, swatches = DEFAULT_SWATCHES }: Co
             type="button"
             $bg={hex}
             $active={active}
+            $check={checkColor(hex)}
             aria-pressed={active}
             aria-label={hex}
             onClick={() => onChange(hex)}
