@@ -111,7 +111,7 @@ export {
   type ContainerProps,
 } from './components/layout';
 export { Tooltip, type TooltipProps } from './components/Tooltip';
-// export { Popover } from './components/Popover';
+export { Popover, type PopoverProps } from './components/Popover';
 // export { Menu, MenuButton, MenuList, MenuItem } from './components/Menu';
 // export { Drawer } from './components/Drawer';
 // export { Alert } from './components/Alert';
