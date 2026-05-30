@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Check } from 'lucide-react';
+import { Check, Minus } from 'lucide-react';
 
 export interface CheckboxProps
   extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'type'> {
@@ -8,6 +8,12 @@ export interface CheckboxProps
   onChange: (checked: boolean) => void;
   label?: string;
   disabled?: boolean;
+  /**
+   * Mixed state (e.g. a "select all" header where only some rows are selected).
+   * Sets the native `input.indeterminate` flag for assistive tech and renders a
+   * visible dash glyph. Only applies while `checked` is false.
+   */
+  indeterminate?: boolean;
 }
 
 const Root = styled.label<{ $disabled?: boolean }>`
@@ -34,7 +40,7 @@ const HiddenInput = styled.input`
   border: 0;
 `;
 
-const Box = styled.span<{ $checked: boolean; $disabled?: boolean }>`
+const Box = styled.span<{ $checked: boolean; $indeterminate?: boolean; $disabled?: boolean }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +49,8 @@ const Box = styled.span<{ $checked: boolean; $disabled?: boolean }>`
   flex-shrink: 0;
   border: 2px solid ${(p) => p.theme.colors.border};
   border-radius: ${(p) => p.theme.radii.sm};
-  background: ${(p) => (p.$checked ? p.theme.colors.primary : p.theme.colors.surface)};
+  background: ${(p) =>
+    p.$checked || p.$indeterminate ? p.theme.colors.primary : p.theme.colors.surface};
   box-shadow: ${(p) => p.theme.shadow.stampSm};
   color: ${(p) => p.theme.colors.primaryInk};
   transition: background 80ms ${(p) => p.theme.easing.out};
@@ -55,19 +62,38 @@ const Box = styled.span<{ $checked: boolean; $disabled?: boolean }>`
 `;
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ checked, onChange, label, disabled, ...rest }, ref) => {
+  ({ checked, onChange, label, disabled, indeterminate = false, ...rest }, ref) => {
+    const innerRef = React.useRef<HTMLInputElement>(null);
+    React.useImperativeHandle(ref, () => innerRef.current as HTMLInputElement, []);
+
+    // Mixed state only applies while unchecked; a checked box is never "mixed".
+    const showIndeterminate = indeterminate && !checked;
+
+    React.useEffect(() => {
+      if (innerRef.current) innerRef.current.indeterminate = showIndeterminate;
+    }, [showIndeterminate]);
+
     return (
       <Root $disabled={disabled}>
         <HiddenInput
-          ref={ref}
+          ref={innerRef}
           type="checkbox"
           checked={checked}
           disabled={disabled}
           onChange={(e) => onChange(e.target.checked)}
           {...rest}
         />
-        <Box $checked={checked} $disabled={disabled} aria-hidden="true">
-          {checked ? <Check size={16} strokeWidth={3} /> : null}
+        <Box
+          $checked={checked}
+          $indeterminate={showIndeterminate}
+          $disabled={disabled}
+          aria-hidden="true"
+        >
+          {checked ? (
+            <Check size={16} strokeWidth={3} />
+          ) : showIndeterminate ? (
+            <Minus size={16} strokeWidth={3} />
+          ) : null}
         </Box>
         {label != null ? <span>{label}</span> : null}
       </Root>

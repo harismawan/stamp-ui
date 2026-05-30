@@ -7,6 +7,9 @@ import {
   Alert, Breadcrumb, BreadcrumbItem, Pagination, Stepper, Table, THead, TBody,
   Tr, Th, Td, Spinner, toast, ToastViewport, confirmDialog, ConfirmViewport,
   ColorPicker, IconPicker, RadioGroup, Radio,
+  Combobox, type ComboboxOption, DataTable, type DataTableColumn,
+  DatePicker, DateRangePicker, type DateRange, Command, type CommandItem,
+  FileUpload, TreeView, type TreeNode, TagInput,
 } from '@harismawan/stamp-ui';
 
 export function Gallery() {
@@ -14,6 +17,71 @@ export function Gallery() {
   const [open, setOpen] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const [tab, setTab] = useState('a');
+
+  // ── Combobox (single + multi) ─────────────────────────────────────────────
+  const fruitOptions: ComboboxOption[] = [
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+    { value: 'cherry', label: 'Cherry' },
+    { value: 'date', label: 'Date' },
+  ];
+  const [fruit, setFruit] = useState<string | null>('apple');
+  const [fruits, setFruits] = useState<string[]>(['apple', 'cherry']);
+
+  // ── DataTable ──────────────────────────────────────────────────────────────
+  interface Person { id: string; name: string; age: number; city: string }
+  const people: Person[] = [
+    { id: '1', name: 'Alice', age: 30, city: 'Jakarta' },
+    { id: '2', name: 'Bob', age: 24, city: 'Bandung' },
+    { id: '3', name: 'Carol', age: 41, city: 'Surabaya' },
+    { id: '4', name: 'Dave', age: 35, city: 'Medan' },
+    { id: '5', name: 'Eve', age: 28, city: 'Bali' },
+  ];
+  const personColumns: DataTableColumn<Person>[] = [
+    { key: 'name', header: 'Name', sortable: true },
+    { key: 'age', header: 'Age', sortable: true, align: 'right' },
+    { key: 'city', header: 'City', sortable: true },
+  ];
+  const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
+
+  // ── Date pickers ────────────────────────────────────────────────────────────
+  const [date, setDate] = useState<Date | null>(null);
+  const [range, setRange] = useState<DateRange>({ start: null, end: null });
+
+  // ── Command palette ──────────────────────────────────────────────────────────
+  const [cmdOpen, setCmdOpen] = useState(false);
+  const commandItems: CommandItem[] = [
+    { id: 'new', label: 'New file', shortcut: '⌘N', onSelect: () => toast.success('New file') },
+    { id: 'open', label: 'Open file', shortcut: '⌘O', onSelect: () => toast.success('Open file') },
+    { id: 'save', label: 'Save', shortcut: '⌘S', group: 'File', onSelect: () => toast.success('Saved') },
+  ];
+
+  // ── FileUpload ────────────────────────────────────────────────────────────────
+  const [files, setFiles] = useState<File[]>([]);
+
+  // ── TreeView ───────────────────────────────────────────────────────────────────
+  const treeNodes: TreeNode[] = [
+    {
+      id: 'src',
+      label: 'src',
+      children: [
+        { id: 'index', label: 'index.ts' },
+        {
+          id: 'components',
+          label: 'components',
+          children: [
+            { id: 'button', label: 'Button.tsx' },
+            { id: 'card', label: 'Card.tsx' },
+          ],
+        },
+      ],
+    },
+    { id: 'readme', label: 'README.md' },
+  ];
+
+  // ── TagInput ─────────────────────────────────────────────────────────────────────
+  const [tags, setTags] = useState<string[]>(['react', 'typescript']);
+
   return (
     <StampProvider mode={mode}>
       <VStack $gap={5} style={{ padding: 24, maxWidth: 720, margin: '0 auto' }}>
@@ -68,6 +136,28 @@ export function Gallery() {
         <Pagination page={2} pageCount={10} onChange={() => {}} />
         <Stepper active={1} steps={[{ label: 'One' }, { label: 'Two' }, { label: 'Three' }]} />
         <Table><THead><Tr><Th>Name</Th><Th>Amt</Th></Tr></THead><TBody><Tr><Td>Coffee</Td><Td>25.000</Td></Tr></TBody></Table>
+        <Combobox options={fruitOptions} value={fruit} onChange={setFruit} placeholder="Pick a fruit" clearable />
+        <Combobox multiple options={fruitOptions} value={fruits} onChange={setFruits} placeholder="Pick fruits" />
+        <DataTable
+          columns={personColumns}
+          data={people}
+          rowKey={(p) => p.id}
+          selectable
+          selectedKeys={selectedPeople}
+          onSelectionChange={setSelectedPeople}
+          pageSize={3}
+          defaultSort={{ key: 'name', dir: 'asc' }}
+          caption="People"
+        />
+        <HStack $gap={3}>
+          <DatePicker value={date} onChange={setDate} clearable />
+          <DateRangePicker value={range} onChange={setRange} clearable />
+        </HStack>
+        <Button onClick={() => setCmdOpen(true)}>Open command palette</Button>
+        <Command open={cmdOpen} onClose={() => setCmdOpen(false)} items={commandItems} />
+        <FileUpload value={files} onChange={setFiles} multiple maxFiles={3} />
+        <TreeView nodes={treeNodes} defaultExpandedIds={['src', 'components']} />
+        <TagInput value={tags} onChange={setTags} placeholder="Add a tag" />
         <EmptyState title="Nothing here" description="Add your first item." />
         <Divider label="end" />
         <Modal open={open} onClose={() => setOpen(false)} title="Demo modal">Modal body</Modal>

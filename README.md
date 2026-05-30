@@ -55,8 +55,9 @@ Light/dark mode is managed by the built-in `useThemeStore` (persisted). Omit
 
 ## Components
 
-- **Form:** `Button`, `Input`/`Select`/`Textarea`/`FieldWrap`/`FieldLabel`/`FieldError`, `NumberInput`, `Checkbox`, `Radio`/`RadioGroup`, `Switch`, `Slider`, `ColorPicker`, `IconPicker`
-- **Display:** `Card`, `Badge`, `Tag`, `Avatar`/`AvatarGroup`, `Stat`, `EmptyState`, `Divider`, `Progress`, `Spinner`, `Skeleton`/`SkeletonText`/`SkeletonCircle`/`SkeletonGroup`, `Table` primitives
+- **Form:** `Button`, `Input`/`Select`/`Textarea`/`FieldWrap`/`FieldLabel`/`FieldError`, `NumberInput`, `Checkbox`, `Radio`/`RadioGroup`, `Switch`, `Slider`, `ColorPicker`, `IconPicker`, `Combobox`, `TagInput`, `FileUpload`
+- **Display:** `Card`, `Badge`, `Tag`, `Avatar`/`AvatarGroup`, `Stat`, `EmptyState`, `Divider`, `Progress`, `Spinner`, `Skeleton`/`SkeletonText`/`SkeletonCircle`/`SkeletonGroup`, `Table` primitives, `DataTable`, `TreeView`
+- **Pickers & palette:** `DatePicker`, `DateRangePicker`, `Command`
 - **Overlays:** `Modal`, `Drawer`, `ConfirmDialog` (`confirmDialog`/`ConfirmViewport`), `Toast` (`toast`/`ToastViewport`), `Tooltip`, `Popover`, `Menu`/`MenuButton`/`MenuList`/`MenuItem`, `Alert`
 - **Disclosure & nav:** `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
 - **Layout:** `Box`, `Stack`/`HStack`/`VStack`, `Grid`, `Container`
