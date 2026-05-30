@@ -47,10 +47,8 @@ const variantMap = {
     ${stamp};
     background: ${(p) => p.theme.colors.primary};
     color: ${(p) => p.theme.colors.primaryInk};
-    &:hover:not(:disabled):not([aria-disabled='true']) {
-      background: ${(p) => p.theme.colors.primaryHover};
-      color: ${(p) => p.theme.colors.primaryInk};
-    }
+    /* Color/background stay constant on hover; the stamp press (translate +
+     * shadow) is the only hover affordance. */
   `,
   ghost: css`
     background: transparent;
