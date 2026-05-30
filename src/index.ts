@@ -146,3 +146,38 @@ export {
   type StepperOrientation,
 } from './components/Stepper';
 export { Table, THead, TBody, Tr, Th, Td } from './components/Table';
+export {
+  Combobox,
+  type ComboboxProps,
+  type ComboboxOption,
+} from './components/Combobox';
+export {
+  DataTable,
+  type DataTableProps,
+  type DataTableColumn,
+  type DataTableSort,
+} from './components/DataTable';
+export { DatePicker, type DatePickerProps } from './components/DatePicker';
+export {
+  Command,
+  type CommandProps,
+  type CommandItem,
+} from './components/Command';
+export {
+  FileUpload,
+  formatFileSize,
+  type FileUploadProps,
+  type FileUploadRejection,
+  type FileUploadRejectReason,
+} from './components/FileUpload';
+export {
+  TreeView,
+  type TreeViewProps,
+  type TreeNode,
+} from './components/TreeView';
+export { TagInput, type TagInputProps } from './components/TagInput';
+export {
+  DateRangePicker,
+  type DateRangePickerProps,
+  type DateRange,
+} from './components/DateRangePicker';
