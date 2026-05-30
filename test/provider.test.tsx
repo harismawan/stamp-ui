@@ -1,18 +1,16 @@
 import { expect, test } from 'bun:test';
 import { render } from '@testing-library/react';
-import styled from 'styled-components';
+import { useTheme } from 'styled-components';
 import { StampProvider } from '../src/provider';
 
-// Probe component reads a theme token, so its computed color proves the
-// ThemeProvider context is supplied by StampProvider.
-const Probe = styled.div`
-  color: ${(p) => p.theme.colors.text};
-`;
-
-// NOTE (environment deviation from spec Step 4): the spec assumed
-// getComputedStyle normalizes hex to `rgb(...)`. happy-dom 16 returns the hex
-// token verbatim, so the assertions below compare against the hex values the
-// spec's own comments document ('#111111' for light, '#FFF5E1' for dark).
+// Probe reads the theme through styled-components context and renders a token
+// as TEXT. This proves StampProvider supplies the theme deterministically,
+// without depending on getComputedStyle resolving an injected CSS rule (which
+// is order-sensitive and unreliable under happy-dom).
+function Probe() {
+  const theme = useTheme();
+  return <span data-testid="probe">{theme.colors.text}</span>;
+}
 
 test('renders children', () => {
   const { getByText } = render(
@@ -23,40 +21,33 @@ test('renders children', () => {
   expect(getByText('child content')).toBeTruthy();
 });
 
-test('supplies the light theme by default (probe gets light text color)', () => {
+test('supplies the light theme by default (probe gets light text token)', () => {
   const { getByTestId } = render(
     <StampProvider mode="light">
-      <Probe data-testid="probe">x</Probe>
+      <Probe />
     </StampProvider>,
   );
-  const el = getByTestId('probe');
   // lightTheme.colors.text === '#111111'
-  expect(getComputedStyle(el).color).toBe('#111111');
+  expect(getByTestId('probe').textContent).toBe('#111111');
 });
 
 test('supplies the dark theme when mode="dark"', () => {
   const { getByTestId } = render(
     <StampProvider mode="dark">
-      <Probe data-testid="probe">x</Probe>
+      <Probe />
     </StampProvider>,
   );
-  const el = getByTestId('probe');
   // darkTheme.colors.text === '#FFF5E1'
-  expect(getComputedStyle(el).color).toBe('#FFF5E1');
+  expect(getByTestId('probe').textContent).toBe('#FFF5E1');
 });
 
 test('an explicit theme prop overrides mode', () => {
-  // A partial theme is shallow-merged over the mode-selected base. Because it
-  // omits `colors`, the un-overridden base tokens are preserved, so text stays
-  // the light value. (The spec's literal `colors: {}` input would replace
-  // base.colors under the spec's own shallow merge and leave text undefined;
-  // omitting `colors` faithfully tests the spec's stated partial-merge intent
-  // while staying consistent with the shallow-merge implementation.)
+  // A partial theme ({}) is shallow-merged over the mode-selected base; since it
+  // omits `colors`, the base light tokens are preserved, so text stays light.
   const { getByTestId } = render(
     <StampProvider theme={{}} mode="light">
-      <Probe data-testid="probe">x</Probe>
+      <Probe />
     </StampProvider>,
   );
-  const el = getByTestId('probe');
-  expect(getComputedStyle(el).color).toBe('#111111');
+  expect(getByTestId('probe').textContent).toBe('#111111');
 });
