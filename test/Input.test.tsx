@@ -1,15 +1,15 @@
-import { describe, it, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import {
+  FieldError,
+  FieldLabel,
+  FieldWrap,
   Input,
   Select,
   Textarea,
-  FieldWrap,
-  FieldLabel,
-  FieldError,
 } from '../src/components/Input';
+import { renderWithTheme } from './util';
 
 describe('Input set', () => {
   afterEach(cleanup);
@@ -53,5 +53,24 @@ describe('Input set', () => {
     );
     expect(screen.getByText('Email')).toBeTruthy();
     expect(screen.getByText('Required')).toBeTruthy();
+  });
+
+  it('clearable hides the clear button when the value is empty', () => {
+    renderWithTheme(<Input clearable value="" onChange={() => {}} aria-label="q" />);
+    expect(screen.queryByRole('button', { name: 'Clear' })).toBeNull();
+  });
+
+  it('clearable shows the clear button when the value is non-empty', () => {
+    renderWithTheme(<Input clearable value="abc" onChange={() => {}} aria-label="q" />);
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeTruthy();
+  });
+
+  it('clearable fires onClear when the clear button is clicked', async () => {
+    const onClear = mock(() => {});
+    renderWithTheme(
+      <Input clearable value="abc" onChange={() => {}} onClear={onClear} aria-label="q" />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(onClear).toHaveBeenCalledTimes(1);
   });
 });

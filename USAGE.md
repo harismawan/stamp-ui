@@ -204,10 +204,11 @@ A clickable action element. Variants and sizes are set through styled-components
   <Button $variant="outline">Cancel</Button>
   <Button $variant="ghost" $size="sm">Skip</Button>
   <Button $variant="danger" $full>Delete</Button>
+  <Button $variant="link" onClick={() => reset()}>Clear filters</Button>
 </HStack>
 ```
 
-Props: `$variant?: 'primary' | 'ghost' | 'outline' | 'danger'` (default `'primary'`), `$size?: 'sm' | 'md' | 'lg'` (default `'md'`), `$full?: boolean` (full width). Renders a `<button>` (default `type="button"`); accepts all native button props (`onClick`, `disabled`, etc.).
+Props: `$variant?: 'primary' | 'ghost' | 'outline' | 'danger' | 'link'` (default `'primary'`), `$size?: 'sm' | 'md' | 'lg'` (default `'md'`), `$full?: boolean` (full width). The `link` variant strips the surface/border/stamp and renders an inline, accent-colored text link (underlines on hover). Renders a `<button>` (default `type="button"`); accepts all native button props (`onClick`, `disabled`, etc.).
 
 ### Input, Select, Textarea, FieldWrap, FieldLabel, FieldError
 
@@ -254,6 +255,46 @@ function ContactField() {
 ```
 
 Props: `Input`, `Select`, and `Textarea` are styled wrappers over `<input>`, `<select>`, and `<textarea>` and take all the respective native props (`value`, `onChange`, `placeholder`, `type`, `disabled`, ...). `FieldWrap` (a `<label>`), `FieldLabel` (a `<span>`), and `FieldError` (a `<span>`) are layout/text elements that take their native props plus `children`.
+
+`Input` also accepts `clearable?: boolean` and `onClear?: () => void`: when `clearable` is set and the (controlled) `value` is non-empty, a trailing ✕ button appears and fires `onClear` (set your value to `''` there). Without `clearable`, `Input` is a plain styled `<input>` and forwards everything (incl. `ref`) to it.
+
+```tsx
+function Search() {
+  const [q, setQ] = React.useState('');
+  return (
+    <Input
+      placeholder="Search…"
+      value={q}
+      onChange={(e) => setQ(e.target.value)}
+      clearable
+      onClear={() => setQ('')}
+    />
+  );
+}
+```
+
+### SegmentedControl
+
+A single-select segmented toggle — a row of pill buttons where exactly one is active. Use it for compact mutually-exclusive choices (view mode, ranges, small enums) instead of a `Select`. Radiogroup semantics with roving focus and arrow / Home / End keys.
+
+```tsx
+function RangePicker() {
+  const [range, setRange] = React.useState('week');
+  return (
+    <SegmentedControl
+      value={range}
+      onChange={setRange}
+      options={[
+        { value: 'day', label: 'Day' },
+        { value: 'week', label: 'Week' },
+        { value: 'month', label: 'Month' },
+      ]}
+    />
+  );
+}
+```
+
+Props: `value: string` (required), `onChange: (value: string) => void` (required), `options: Array<{ value: string; label?: ReactNode; disabled?: boolean } | string>` (required; bare strings use the value as label), `$size?: 'sm' | 'md' | 'lg'` (default `'md'`), `$full?: boolean` (stretch to fill, equal-width segments), `disabled?: boolean`.
 
 ### NumberInput
 

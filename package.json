@@ -1,6 +1,6 @@
 {
   "name": "@harismawan/stamp-ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Stamp-aesthetic React component library — chunky borders, hard offset shadows, no gradients.",
   "license": "MIT",
   "author": "Harismawan <mail@harismawan.com>",
@@ -12,7 +12,9 @@
   "bugs": "https://github.com/harismawan/stamp-ui/issues",
   "type": "module",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
