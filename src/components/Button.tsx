@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export interface ButtonProps {
-  $variant?: 'primary' | 'ghost' | 'outline' | 'danger';
+  $variant?: 'primary' | 'ghost' | 'outline' | 'danger' | 'link';
   $size?: 'sm' | 'md' | 'lg';
   $full?: boolean;
 }
@@ -73,6 +73,19 @@ const variantMap = {
     color: ${(p) => p.theme.colors.surface};
     &:hover:not(:disabled):not([aria-disabled='true']) {
       color: ${(p) => p.theme.colors.surface};
+    }
+  `,
+  link: css`
+    /* Text-link affordance: no surface, no stamp, padding collapses so it sits
+     * inline with copy. Underlines on hover. */
+    padding-left: 0;
+    padding-right: 0;
+    background: transparent;
+    border: 2px solid transparent;
+    box-shadow: none;
+    color: ${(p) => p.theme.colors.accent};
+    &:hover:not(:disabled):not([aria-disabled='true']) {
+      text-decoration: underline;
     }
   `,
 } as const;

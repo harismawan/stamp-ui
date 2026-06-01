@@ -21,7 +21,13 @@ export {
   FieldWrap,
   FieldLabel,
   FieldError,
+  type InputProps,
 } from './components/Input';
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedOption,
+} from './components/SegmentedControl';
 export { NumberInput, type NumberInputProps } from './components/NumberInput';
 export { Spinner, type SpinnerProps } from './components/Spinner';
 export {

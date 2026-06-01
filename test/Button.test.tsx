@@ -1,10 +1,10 @@
-import { describe, it, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Button } from '../src/components/Button';
 // Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
 // `allowImportingTsExtensions`, so `.tsx` import suffixes fail TS5097 there.
 import { renderWithTheme } from './util';
-import { Button } from '../src/components/Button';
 
 // happy-dom is registered once for the whole `bun test` run (test/setup.ts),
 // so every file shares one global `document`. These tests query via the global
@@ -41,6 +41,11 @@ describe('Button', () => {
     );
     await userEvent.click(screen.getByRole('button', { name: 'Go' }));
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('supports the link variant', () => {
+    renderWithTheme(<Button $variant="link">More</Button>);
+    expect(screen.getByRole('button', { name: 'More' })).toBeTruthy();
   });
 
   it('renders as an anchor when as="a"', () => {
