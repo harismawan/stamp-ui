@@ -62,3 +62,26 @@ test('ChipGroup disabled option does not fire onChange', () => {
   fireEvent.click(screen.getByRole('radio', { name: 'photo' }));
   expect(fired).toBe(false);
 });
+
+test('ChipGroup single-select arrow keys move selection and skip disabled', () => {
+  let next: unknown = null;
+  renderWithTheme(
+    <ChipGroup
+      aria-label="Type"
+      options={['photo', { value: 'video', disabled: true }, 'voice']}
+      value="photo"
+      onChange={(v) => (next = v)}
+    />,
+  );
+  const photo = screen.getByRole('radio', { name: 'photo' });
+  fireEvent.keyDown(photo, { key: 'ArrowRight' });
+  expect(next).toBe('voice'); // skipped disabled 'video'
+});
+
+test('ChipGroup single-select uses roving tabIndex', () => {
+  renderWithTheme(
+    <ChipGroup aria-label="Type" options={['photo', 'video']} value="video" onChange={() => {}} />,
+  );
+  expect(screen.getByRole('radio', { name: 'video' }).getAttribute('tabindex')).toBe('0');
+  expect(screen.getByRole('radio', { name: 'photo' }).getAttribute('tabindex')).toBe('-1');
+});
