@@ -193,3 +193,4 @@ export {
   type ChipGroupProps,
   type ChipGroupOption,
 } from './components/ChipGroup';
+export { Rating, type RatingProps } from './components/Rating';
