@@ -212,3 +212,4 @@ export {
   type AvatarFrameAspect,
 } from './components/AvatarFrame';
 export { RankList, type RankListProps, type RankListItem } from './components/RankList';
+export { GoalProgress, type GoalProgressProps } from './components/GoalProgress';
