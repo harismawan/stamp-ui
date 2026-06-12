@@ -188,3 +188,8 @@ export {
   type DateRange,
 } from './components/DateRangePicker';
 export { PriceTag, type PriceTagProps, type PriceTagSize } from './components/PriceTag';
+export {
+  ChipGroup,
+  type ChipGroupProps,
+  type ChipGroupOption,
+} from './components/ChipGroup';
