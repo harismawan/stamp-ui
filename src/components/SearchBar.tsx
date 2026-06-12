@@ -61,6 +61,10 @@ const Field = styled.input<{ $size: SearchBarSize }>`
   &:focus {
     outline: none;
   }
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    display: none;
+  }
 `;
 
 const IconSlot = styled.span`
@@ -126,6 +130,7 @@ export function SearchBar({
       style={style}
       onSubmit={(e) => {
         e.preventDefault();
+        if (disabled) return;
         onSubmit?.(current);
       }}
     >
@@ -141,7 +146,7 @@ export function SearchBar({
         disabled={disabled}
         {...rest}
       />
-      {clearable && current.length > 0 ? (
+      {clearable && !disabled && current.length > 0 ? (
         <ClearButton type="button" aria-label="Clear" onClick={() => set('')}>
           <X size={16} strokeWidth={2.5} aria-hidden="true" />
         </ClearButton>

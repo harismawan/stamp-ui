@@ -30,3 +30,24 @@ test('SearchBar clearable shows a clear button that empties the value', () => {
   fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
   expect((screen.getByRole('searchbox') as HTMLInputElement).value).toBe('');
 });
+
+test('SearchBar disabled does not submit or show clear', () => {
+  let submitted = false;
+  renderWithTheme(
+    <SearchBar
+      aria-label="s"
+      defaultValue="x"
+      clearable
+      disabled
+      onSubmit={() => (submitted = true)}
+    />,
+  );
+  expect(screen.queryByRole('button', { name: 'Clear' })).toBeNull();
+  fireEvent.submit(screen.getByRole('search'));
+  expect(submitted).toBe(false);
+});
+
+test('SearchBar renders only the custom clear button', () => {
+  renderWithTheme(<SearchBar aria-label="s" defaultValue="x" clearable />);
+  expect(screen.getAllByRole('button').length).toBe(1);
+});
