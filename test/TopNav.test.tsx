@@ -22,14 +22,20 @@ test('TopNav renders logo, center slot, links, and actions', () => {
 });
 
 test('TopNav hamburger opens a drawer with the nav children', () => {
-  renderWithTheme(
+  const { container } = renderWithTheme(
     <TopNav logo={<span>logo</span>} mobileTitle="Menu">
       <TopNavLinks>
         <a href="/x">LinkX</a>
       </TopNavLinks>
     </TopNav>,
   );
-  fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+  // display:none hides the button from the a11y tree under happy-dom (no real
+  // media-query evaluation), so query the DOM directly. In production the
+  // button is display:none on desktop and display:inline-flex on mobile —
+  // the correct a11y behaviour.
+  const hamburger = container.querySelector('button[aria-label="Open menu"]');
+  if (!hamburger) throw new Error('Hamburger button not found');
+  fireEvent.click(hamburger);
   expect(screen.getByRole('dialog', { name: 'Menu' })).toBeTruthy();
   // link now exists twice: desktop area + drawer
   expect(screen.getAllByText('LinkX').length).toBe(2);

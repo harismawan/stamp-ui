@@ -57,7 +57,7 @@ const DesktopArea = styled.div<{ $collapseAt: number }>`
 `;
 
 const Hamburger = styled.button<{ $collapseAt: number }>`
-  display: inline-flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -76,20 +76,8 @@ const Hamburger = styled.button<{ $collapseAt: number }>`
     outline-offset: 1px;
   }
 
-  /* Visually hide (not display:none) at wide viewports so it stays in the
-     a11y tree and keyboard-accessible regardless of viewport. Pointer events
-     are suppressed so it does not intercept clicks on desktop layouts. */
-  @media (min-width: ${(p) => p.$collapseAt + 1}px) {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-    pointer-events: none;
+  @media (max-width: ${(p) => p.$collapseAt}px) {
+    display: inline-flex;
   }
 `;
 
@@ -147,6 +135,8 @@ export function TopNavActions({ children, ...rest }: TopNavActionsProps) {
 /**
  * Marketplace top navbar: logo · center slot (search) · links/actions.
  * Links/actions collapse into a hamburger Drawer below `collapseAt` px.
+ * Children render twice (desktop bar + open drawer) — keep them free of
+ * `id`/`htmlFor` attributes to avoid duplicate-id markup.
  */
 export function TopNav({
   logo,
