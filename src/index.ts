@@ -231,3 +231,9 @@ export {
   type TopNavProps,
   type TopNavActionsProps,
 } from './components/TopNav';
+export {
+  Footer,
+  FooterColumn,
+  type FooterProps,
+  type FooterColumnProps,
+} from './components/Footer';
