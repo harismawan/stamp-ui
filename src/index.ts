@@ -204,3 +204,4 @@ export {
   type MediaCardCoverProps,
   type MediaAspect,
 } from './components/MediaCard';
+export { SearchBar, type SearchBarProps, type SearchBarSize } from './components/SearchBar';
