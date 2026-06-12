@@ -224,3 +224,10 @@ export {
   type FilterSheetProps,
   type FilterSectionProps,
 } from './components/FilterSheet';
+export {
+  TopNav,
+  TopNavLinks,
+  TopNavActions,
+  type TopNavProps,
+  type TopNavActionsProps,
+} from './components/TopNav';
