@@ -218,3 +218,9 @@ export {
   type MediaGalleryProps,
   type MediaGalleryItem,
 } from './components/MediaGallery';
+export {
+  FilterSheet,
+  FilterSection,
+  type FilterSheetProps,
+  type FilterSectionProps,
+} from './components/FilterSheet';
