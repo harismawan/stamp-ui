@@ -206,3 +206,8 @@ export {
 } from './components/MediaCard';
 export { SearchBar, type SearchBarProps, type SearchBarSize } from './components/SearchBar';
 export { Carousel, type CarouselProps } from './components/Carousel';
+export {
+  AvatarFrame,
+  type AvatarFrameProps,
+  type AvatarFrameAspect,
+} from './components/AvatarFrame';
