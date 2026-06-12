@@ -194,3 +194,13 @@ export {
   type ChipGroupOption,
 } from './components/ChipGroup';
 export { Rating, type RatingProps } from './components/Rating';
+export {
+  MediaCard,
+  MediaCardCover,
+  MediaCardBadge,
+  MediaCardBody,
+  aspectRatio,
+  type MediaCardProps,
+  type MediaCardCoverProps,
+  type MediaAspect,
+} from './components/MediaCard';
