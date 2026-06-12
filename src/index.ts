@@ -187,3 +187,4 @@ export {
   type DateRangePickerProps,
   type DateRange,
 } from './components/DateRangePicker';
+export { PriceTag, type PriceTagProps, type PriceTagSize } from './components/PriceTag';
