@@ -1146,3 +1146,276 @@ A centered, max-width wrapper with horizontal page padding. Use it to constrain 
 ```
 
 Props (`ContainerProps`): `$max?: number` (max width in px, default `1120`). Horizontal padding is applied automatically from the theme.
+
+---
+
+## Marketplace pack
+
+### PriceTag
+
+Inline price display with an optional struck-through original price. Never formats numbers — pass pre-formatted strings from the consuming app.
+
+```tsx
+<PriceTag $size="lg" original="Rp 150.000">Rp 99.000</PriceTag>
+```
+
+Props: `children: React.ReactNode` (required; the current price); `original?: React.ReactNode` (original price, rendered struck-through after the current price); `$size?: 'sm' | 'md' | 'lg'` (default `'md'`). Spreads remaining `span` props.
+
+### ChipGroup
+
+Toggleable selection chips for filter bars and category pickers. In single mode the group acts as a `radiogroup` with roving keyboard navigation (arrow keys move focus + selection). In multiple mode each chip is an independent toggle button.
+
+```tsx
+function Example() {
+  const [genre, setGenre] = React.useState<string | null>('illustration');
+  return (
+    <ChipGroup
+      options={['illustration', 'photo', 'video', 'audio']}
+      value={genre}
+      onChange={(v) => setGenre(v as string)}
+    />
+  );
+}
+```
+
+Props: `options: ChipGroupOption[]` (required; each item is a `string` or `{ value: string; label?: string; disabled?: boolean }`); `value: string | string[] | null` (required); `onChange: (next: string | string[]) => void` (required); `multiple?: boolean` (default `false`; when `true`, `value` must be `string[]` and `onChange` receives `string[]`). Spreads remaining `div` props.
+
+### Rating
+
+Star rating display or interactive star input. Display mode (`readOnly` or no `onChange`) renders a `role="img"` span with fractional star fill. Interactive mode (`onChange` present and `readOnly` not set) renders a `radiogroup` with roving keyboard navigation (arrow keys, Home, End).
+
+```tsx
+{/* Display */}
+<Rating value={4.5} count={128} />
+
+{/* Interactive */}
+function RatingInput() {
+  const [stars, setStars] = React.useState(0);
+  return <Rating value={stars} onChange={setStars} label="Rate this item" />;
+}
+```
+
+Props: `value: number` (required; 0–5, fractions render partially filled stars in display mode); `count?: number` (review count rendered as `"(n)"` after the stars); `onChange?: (value: number) => void` (presence without `readOnly` switches to interactive input mode); `readOnly?: boolean`; `size?: number` (star glyph size in px, default `18`); `label?: string` (accessible label override). Spreads remaining `span` props.
+
+### MediaCard
+
+Zero-padding card shell for media-commerce layouts. Compose `MediaCardCover`, `MediaCardBadge`, and `MediaCardBody` inside. `aspectRatio` is a record mapping `MediaAspect` keys to CSS `aspect-ratio` values (re-exported for custom cover variants).
+
+```tsx
+<MediaCard $hover>
+  <MediaCardCover src="/poster.jpg" alt="Mystic Forest" $aspect="3:4">
+    <MediaCardBadge>NEW</MediaCardBadge>
+  </MediaCardCover>
+  <MediaCardBody>
+    <strong>Mystic Forest Pack</strong>
+    <HStack $gap={2} $align="center">
+      <PriceTag>Rp 75.000</PriceTag>
+      <Rating value={4.2} count={34} size={14} />
+    </HStack>
+  </MediaCardBody>
+</MediaCard>
+```
+
+Props:
+- `MediaCard`: `$hover?: boolean` (adds lift transform + larger shadow on hover). Renders a `div`.
+- `MediaCardCover`: `src?: string`, `alt?: string` (default `''`), `$aspect?: MediaAspect` (default `'4:3'`; one of `'3:4' | '4:3' | '16:9' | '1:1'`), `children?: React.ReactNode` (overlay slot for badges and icons). Spreads remaining `div` props.
+- `MediaCardBadge`: styled `span`, absolutely positioned in the cover's top-right corner. No extra props.
+- `MediaCardBody`: styled `div` with column flex and gap. No extra props.
+- `aspectRatio`: `Record<MediaAspect, string>` — maps aspect keys to CSS `aspect-ratio` strings.
+
+### SearchBar
+
+Pill-shaped search composite with a leading search icon and optional clear button. Suppresses the native browser search clear button. Controlled when `value` is passed; otherwise uncontrolled via `defaultValue`.
+
+```tsx
+function Example() {
+  const [q, setQ] = React.useState('');
+  return (
+    <SearchBar
+      value={q}
+      onChange={setQ}
+      onSubmit={(v) => console.log('search:', v)}
+      placeholder="Search creators…"
+      $size="lg"
+      clearable
+    />
+  );
+}
+```
+
+Props: `value?: string` and `onChange?: (value: string) => void` (controlled), or `defaultValue?: string` (uncontrolled, default `''`); `onSubmit?: (value: string) => void` (fired on Enter / form submit with current value); `placeholder?: string` (default `'Search'`); `$size?: 'md' | 'lg' | 'xl'` (default `'md'`); `clearable?: boolean` (shows a clear button when the field has a value); `disabled?: boolean`; `aria-label?: string`; `id?: string`; `name?: string`.
+
+### Carousel
+
+Horizontal scroll-snap strip with prev/next chevron buttons. Each direct child becomes a snap-aligned slide. Uses CSS scroll-snap exclusively — no carousel library. Respects `prefers-reduced-motion`.
+
+```tsx
+<Carousel ariaLabel="Featured drops" $gap={4}>
+  {drops.map((d) => (
+    <div key={d.id} style={{ width: 220 }}>
+      <MediaCard $hover>
+        <MediaCardCover src={d.cover} alt={d.title} />
+        <MediaCardBody><strong>{d.title}</strong></MediaCardBody>
+      </MediaCard>
+    </div>
+  ))}
+</Carousel>
+```
+
+Props: `ariaLabel: string` (required; accessible name for the carousel `region`); `$gap?: keyof Theme['space']` (theme space key for the gap between slides, default `4`); `children: React.ReactNode` (required). Spreads remaining `div` props.
+
+### AvatarFrame
+
+"Trading card" framed portrait with a bottom-edge badge slot. The `badge` overhangs the frame border; leave bottom margin in the parent layout to avoid clipping.
+
+```tsx
+<AvatarFrame
+  src="/creators/rin.jpg"
+  name="Tohsaka Rin"
+  size={80}
+  $aspect="3:4"
+  badge={<Badge $variant="primary">Lv 12</Badge>}
+/>
+```
+
+Props: `name: string` (required; used as alt text and for initials fallback); `src?: string` (portrait image URL; omit to show initials); `size?: number` (portrait width in px, default `96`; height follows `$aspect`); `frameColor?: string` (CSS color for the frame background, defaults to theme primary); `badge?: React.ReactNode` (rendered bottom-center, overlapping the frame edge); `$aspect?: '1:1' | '3:4'` (default `'1:1'`). Spreads remaining `div` props.
+
+### RankList
+
+Ranked ordered list for leaderboards and top-supporter tables. Rows are numbered automatically; the first `highlightTop` rows receive an accent background.
+
+```tsx
+<RankList
+  items={[
+    { id: '1', label: 'Sakura', avatarSrc: '/avatars/sakura.jpg', value: 'Rp 500.000' },
+    { id: '2', label: 'Shirou', value: 'Rp 320.000' },
+    { id: '3', label: 'Archer', value: 'Rp 180.000' },
+  ]}
+  highlightTop={1}
+/>
+```
+
+Props: `items: RankListItem[]` (required; each `{ id: string; label: string; avatarSrc?: string; value?: React.ReactNode }`); `highlightTop?: number` (first N rows receive the accent background, default `0`); `showAvatars?: boolean` (render Avatar before labels, default `true`). Spreads remaining `ol` props.
+
+### GoalProgress
+
+Labeled progress bar composite for wishlist funding bars and goal trackers. Wraps the base `Progress` component with an optional header row showing a goal name and pre-formatted value string.
+
+```tsx
+<GoalProgress
+  label="Monthly goal"
+  valueLabel="Rp 119.000 / Rp 350.000 — 34%"
+  value={119_000}
+  max={350_000}
+  $variant="primary"
+/>
+```
+
+Props: `value: number` (required); `max: number` (required); `label?: string` (goal name, top-left); `valueLabel?: string` (pre-formatted progress string, top-right); `$variant?: 'primary' | 'success' | 'danger'` (default `'primary'`). Spreads remaining `div` props.
+
+### MediaGallery
+
+Main image with a scrollable thumbnail strip below. Controlled via `index` + `onIndexChange`, or uncontrolled via `defaultIndex`. Renders `null` when `items` is empty; omits the thumbnail strip when `items` has only one entry.
+
+```tsx
+function Example() {
+  const [idx, setIdx] = React.useState(0);
+  return (
+    <MediaGallery
+      items={[
+        { src: '/product/front.jpg', alt: 'Front view' },
+        { src: '/product/back.jpg', alt: 'Back view' },
+        { src: '/product/detail.jpg', alt: 'Detail view' },
+      ]}
+      index={idx}
+      onIndexChange={setIdx}
+      $aspect="4:3"
+    />
+  );
+}
+```
+
+Props: `items: MediaGalleryItem[]` (required; each `{ src: string; alt: string }`); `index?: number` and `onIndexChange?: (index: number) => void` (controlled), or `defaultIndex?: number` (uncontrolled, default `0`); `$aspect?: MediaAspect` (default `'4:3'`). Spreads remaining `div` props.
+
+### FilterSheet
+
+Sectioned filter panel inside a `Drawer`. Use `FilterSection` for labeled groups with per-section reset buttons. An apply button commits changes (`onApply`) and closes the sheet; an optional reset-all button clears everything.
+
+```tsx
+function Example() {
+  const filter = useDisclosure();
+  const [genres, setGenres] = React.useState<string[]>([]);
+  return (
+    <>
+      <Button onClick={filter.open}>Filter</Button>
+      <FilterSheet
+        open={filter.isOpen}
+        onClose={filter.close}
+        onApply={() => console.log('applied')}
+        onResetAll={() => setGenres([])}
+        title="Filter drops"
+      >
+        <FilterSection title="Genre" onReset={() => setGenres([])}>
+          <ChipGroup
+            options={['illustration', 'photo', 'video']}
+            value={genres}
+            onChange={(v) => setGenres(v as string[])}
+            multiple
+          />
+        </FilterSection>
+      </FilterSheet>
+    </>
+  );
+}
+```
+
+Props:
+- `FilterSheet`: `open: boolean` (required), `onClose: () => void` (required), `onApply?: () => void` (fired before `onClose` when Apply is clicked), `onResetAll?: () => void` (renders the reset-all button when provided), `title?: string` (default `'Filter'`), `side?: DrawerSide` (default `'right'`), `applyLabel?: string` (default `'Apply'`), `resetAllLabel?: string` (default `'Reset all'`), `children: React.ReactNode` (required).
+- `FilterSection`: `title: string` (required), `onReset?: () => void` (renders a per-section reset button when provided), `resetLabel?: string` (default `'Reset'`), `children: React.ReactNode` (required).
+
+### TopNav
+
+Marketplace top navigation bar with logo, center slot (typically `SearchBar`), and link/action areas that collapse into a hamburger drawer below `collapseAt` px. Children (`TopNavLinks`, `TopNavActions`) render in both the desktop bar and the mobile drawer — avoid `id`/`htmlFor` attributes on them to prevent duplicate-id markup.
+
+```tsx
+<TopNav
+  logo={<strong>Tokoshi</strong>}
+  center={<SearchBar placeholder="Search drops…" $size="lg" />}
+  sticky
+>
+  <TopNavLinks>
+    <a href="/explore">Explore</a>
+    <a href="/creators">Creators</a>
+  </TopNavLinks>
+  <TopNavActions>
+    <Button $variant="outline" $size="sm">Log in</Button>
+    <Button $size="sm">Sign up</Button>
+  </TopNavActions>
+</TopNav>
+```
+
+Props:
+- `TopNav`: `logo?: React.ReactNode`; `center?: React.ReactNode` (center slot, stays visible on mobile); `sticky?: boolean` (default `true`; applies `position: sticky; top: 0`); `collapseAt?: number` (px breakpoint below which links/actions collapse into the drawer, default `880`); `mobileTitle?: string` (drawer title, default `'Menu'`); `children?: React.ReactNode`. Spreads remaining `header` props.
+- `TopNavLinks`: styled `nav` — style anchor tags inside it for nav links.
+- `TopNavActions`: `children: React.ReactNode` (required). Spreads remaining `div` props. Use for CTA buttons or icon buttons.
+
+### Footer
+
+Page footer with a responsive auto-fit column grid and an optional bottom bar for copyright lines. Columns are built with `FooterColumn`.
+
+```tsx
+<Footer bottom={<span>© 2026 Tokoshi. All rights reserved.</span>}>
+  <FooterColumn title="Explore">
+    <a href="/drops">New drops</a>
+    <a href="/creators">Creators</a>
+  </FooterColumn>
+  <FooterColumn title="Support">
+    <a href="/faq">FAQ</a>
+    <a href="/contact">Contact</a>
+  </FooterColumn>
+</Footer>
+```
+
+Props:
+- `Footer`: `bottom?: React.ReactNode` (bottom bar content rendered below a separator); `children: React.ReactNode` (required; `FooterColumn` elements). Spreads remaining `footer` props.
+- `FooterColumn`: `title?: string` (column heading); `children: React.ReactNode` (required; anchor tags get muted color + underline-on-hover styling automatically).

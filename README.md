@@ -55,12 +55,13 @@ Light/dark mode is managed by the built-in `useThemeStore` (persisted). Omit
 
 ## Components
 
-- **Form:** `Button`, `Input`/`Select`/`Textarea`/`FieldWrap`/`FieldLabel`/`FieldError`, `NumberInput`, `Checkbox`, `Radio`/`RadioGroup`, `Switch`, `Slider`, `ColorPicker`, `IconPicker`, `Combobox`, `TagInput`, `FileUpload`
-- **Display:** `Card`, `Badge`, `Tag`, `Avatar`/`AvatarGroup`, `Stat`, `EmptyState`, `Divider`, `Progress`, `Spinner`, `Skeleton`/`SkeletonText`/`SkeletonCircle`/`SkeletonGroup`, `Table` primitives, `DataTable`, `TreeView`
+- **Form:** `Button`, `Input`/`Select`/`Textarea`/`FieldWrap`/`FieldLabel`/`FieldError`, `NumberInput`, `Checkbox`, `Radio`/`RadioGroup`, `Switch`, `Slider`, `ColorPicker`, `IconPicker`, `Combobox`, `TagInput`, `FileUpload`, `SearchBar`, `ChipGroup`
+- **Display:** `Card`, `Badge`, `Tag`, `Avatar`/`AvatarGroup`, `Stat`, `EmptyState`, `Divider`, `Progress`, `Spinner`, `Skeleton`/`SkeletonText`/`SkeletonCircle`/`SkeletonGroup`, `Table` primitives, `DataTable`, `TreeView`, `PriceTag`, `Rating`, `RankList`, `GoalProgress`
+- **Media & commerce:** `MediaCard`/`MediaCardCover`/`MediaCardBadge`/`MediaCardBody`, `MediaGallery`, `Carousel`, `AvatarFrame`
 - **Pickers & palette:** `DatePicker`, `DateRangePicker`, `Command`
-- **Overlays:** `Modal`, `Drawer`, `ConfirmDialog` (`confirmDialog`/`ConfirmViewport`), `Toast` (`toast`/`ToastViewport`), `Tooltip`, `Popover`, `Menu`/`MenuButton`/`MenuList`/`MenuItem`, `Alert`
-- **Disclosure & nav:** `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`
-- **Layout:** `Box`, `Stack`/`HStack`/`VStack`, `Grid`, `Container`
+- **Overlays:** `Modal`, `Drawer`, `ConfirmDialog` (`confirmDialog`/`ConfirmViewport`), `Toast` (`toast`/`ToastViewport`), `Tooltip`, `Popover`, `Menu`/`MenuButton`/`MenuList`/`MenuItem`, `Alert`, `FilterSheet`/`FilterSection`
+- **Disclosure & nav:** `Tabs`, `Accordion`, `Breadcrumb`, `Pagination`, `Stepper`, `TopNav`/`TopNavLinks`/`TopNavActions`
+- **Layout:** `Box`, `Stack`/`HStack`/`VStack`, `Grid`, `Container`, `Footer`/`FooterColumn`
 - **Hooks:** `useThemeStore`, `useDisclosure`, `useClickOutside`
 
 ## Development
