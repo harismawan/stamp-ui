@@ -41,6 +41,16 @@ const Chip = styled.button<{ $selected: boolean }>`
     outline: 2px solid ${(p) => p.theme.colors.accent};
     outline-offset: 1px;
   }
+  /*
+   * Roving tabIndex parks keyboard focus on one chip (the selected one, or the
+   * first when none is selected). That focus ring lingers while the mouse hovers
+   * a different chip, making two chips look active at once. While the group is
+   * hovered, drop the ring on any chip that isn't the one under the cursor; it
+   * returns when the pointer leaves, so keyboard-only users keep the ring.
+   */
+  ${Wrap}:hover &:focus-visible:not(:hover) {
+    outline: none;
+  }
   &:disabled {
     opacity: 0.55;
     cursor: not-allowed;
