@@ -48,6 +48,17 @@ export const GlobalStyles = createGlobalStyle`
     outline-offset: 2px;
   }
 
+  /*
+   * Composite search controls (SearchBar) wrap the input in a rounded pill that
+   * casts its own :focus-within ring. The bare input is rectangular, so a
+   * focus-visible outline would draw a rect poking outside the pill. Suppress
+   * it here; the pill's focus-within affordance stands in (submit button keeps
+   * its own outline).
+   */
+  [role="search"] input:focus-visible {
+    outline: none;
+  }
+
   h1, h2, h3, h4 {
     margin: 0;
     font-weight: 700;
