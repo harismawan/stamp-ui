@@ -26,7 +26,7 @@ const Root = styled.div<{ $size: number }>`
   font-size: ${(p) => Math.round(p.$size * 0.38)}px;
   font-weight: 800;
   color: ${(p) => p.theme.colors.primaryInk};
-  background: ${(p) => p.theme.colors.primarySoft};
+  background: ${(p) => p.theme.colors.primary};
   border: 2px solid ${(p) => p.theme.colors.border};
   border-radius: ${(p) => p.theme.radii.pill};
   box-shadow: ${(p) => p.theme.shadow.stampSm};
