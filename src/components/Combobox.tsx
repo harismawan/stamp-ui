@@ -86,6 +86,18 @@ const ControlInput = styled.input`
   padding: 4px 0;
   outline: none;
 
+  /*
+   * The visible field box is the rounded Control, not this bare input — its
+   * :focus-within stamp shadow is the focus affordance. GlobalStyles' generic
+   * \`input:focus-visible\` outline outranks the unscoped \`outline: none\` above
+   * (same specificity, but element+pseudo beats class) and would draw a square
+   * ring inside the rounded box. Re-suppress it with a focus-visible selector
+   * that wins on specificity. Mirrors the \`[role="search"] input\` carve-out.
+   */
+  &:focus-visible {
+    outline: none;
+  }
+
   &::placeholder {
     color: ${(p) => p.theme.colors.textSubtle};
   }
