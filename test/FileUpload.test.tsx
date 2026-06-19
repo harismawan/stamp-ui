@@ -251,4 +251,61 @@ describe('FileUpload', () => {
     ).not.toThrow();
     expect(getComputedStyle(zone).boxShadow).toBe(lightTheme.shadow.none);
   });
+
+  it('renders an object-URL thumbnail for image files and revokes it on remove', async () => {
+    const created: string[] = [];
+    const revoked: string[] = [];
+    const origCreate = URL.createObjectURL;
+    const origRevoke = URL.revokeObjectURL;
+    URL.createObjectURL = mock((_b: Blob) => {
+      const u = `blob:thumb-${created.length}`;
+      created.push(u);
+      return u;
+    }) as typeof URL.createObjectURL;
+    URL.revokeObjectURL = mock((u: string) => {
+      revoked.push(u);
+    }) as typeof URL.revokeObjectURL;
+    try {
+      renderWithTheme(<FileUpload multiple />);
+      const img = makeFile('pic.png', { type: 'image/png' });
+      await userEvent.upload(getFileInput(), img);
+      const thumb = (await waitFor(() => {
+        const el = document.querySelector('img');
+        if (!el) throw new Error('no thumb yet');
+        return el;
+      })) as HTMLImageElement;
+      expect(thumb.getAttribute('src')).toBe('blob:thumb-0');
+
+      const removeBtn = screen.getByRole('button', { name: 'Remove pic.png' });
+      await userEvent.click(removeBtn);
+      await waitFor(() => expect(revoked).toContain('blob:thumb-0'));
+    } finally {
+      URL.createObjectURL = origCreate;
+      URL.revokeObjectURL = origRevoke;
+    }
+  });
+
+  it('does not render a thumbnail for non-image files', async () => {
+    renderWithTheme(<FileUpload />);
+    await userEvent.upload(getFileInput(), makeFile('doc.txt', { type: 'text/plain' }));
+    await waitFor(() => expect(screen.getByText('doc.txt')).toBeTruthy());
+    expect(document.querySelector('img')).toBeNull();
+  });
+
+  it('renders a per-file progress bar from the progress prop', async () => {
+    renderWithTheme(<FileUpload multiple value={[]} progress={() => 42} />);
+    // controlled with a progress-bearing file
+    const file = makeFile('up.png', { type: 'image/png' });
+    cleanup();
+    renderWithTheme(<FileUpload multiple value={[file]} progress={() => 42} />);
+    const bar = await waitFor(() => screen.getByRole('progressbar'));
+    expect(bar.getAttribute('aria-valuenow')).toBe('42');
+  });
+
+  it('disables the remove button while a file is uploading (progress < 100)', async () => {
+    const file = makeFile('up.txt');
+    renderWithTheme(<FileUpload multiple value={[file]} progress={() => 30} />);
+    const removeBtn = screen.getByRole('button', { name: 'Remove up.txt' }) as HTMLButtonElement;
+    expect(removeBtn.disabled).toBe(true);
+  });
 });
