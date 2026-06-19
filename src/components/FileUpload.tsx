@@ -25,6 +25,13 @@ export interface FileUploadProps {
   label?: React.ReactNode;
   /** Optional id; an internal one is generated with `useId` otherwise. */
   id?: string;
+  /**
+   * Per-file upload progress as a percentage (0–100). Return `null`/`undefined`
+   * for files that are not uploading. When a value below 100 is returned, the
+   * row renders a progress bar (in place of the file size) and disables its
+   * remove button until the upload settles.
+   */
+  progress?: (file: File, index: number) => number | null | undefined;
 }
 
 export interface FileUploadRejection {
@@ -113,12 +120,57 @@ const FileRow = styled.li`
   border-radius: ${(p) => p.theme.radii.sm};
 `;
 
-const FileName = styled.span`
+const Media = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  color: ${(p) => p.theme.colors.textMuted};
+  background: ${(p) => p.theme.colors.surface};
+  border: 2px solid ${(p) => p.theme.colors.border};
+  border-radius: ${(p) => p.theme.radii.xs};
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+`;
+
+const Meta = styled.span`
+  display: flex;
+  flex-direction: column;
+  gap: ${(p) => p.theme.space[1]};
   flex: 1;
+  min-width: 0;
+`;
+
+const FileName = styled.span`
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const RowBar = styled.span`
+  display: block;
+  width: 100%;
+  height: 6px;
+  overflow: hidden;
+  background: ${(p) => p.theme.colors.surfaceMuted};
+  border: 2px solid ${(p) => p.theme.colors.border};
+  border-radius: ${(p) => p.theme.radii.pill};
+
+  > span {
+    display: block;
+    height: 100%;
+    background: ${(p) => p.theme.colors.primary};
+    transition: width 80ms ${(p) => p.theme.easing.out};
+  }
 `;
 
 const FileSize = styled.span`
@@ -191,6 +243,33 @@ function matchesAccept(file: File, accept?: string): boolean {
   });
 }
 
+/**
+ * Per-row media: an object-URL thumbnail for image files (revoked on unmount or
+ * when the file changes), or the generic file glyph otherwise. Encapsulating the
+ * URL lifecycle per row keeps creation/revocation correctly paired.
+ */
+const RowMedia: React.FC<{ file: File }> = ({ file }) => {
+  const [url, setUrl] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (!file.type.startsWith('image/') || typeof URL?.createObjectURL !== 'function') {
+      setUrl(null);
+      return;
+    }
+    const next = URL.createObjectURL(file);
+    setUrl(next);
+    return () => URL.revokeObjectURL(next);
+  }, [file]);
+  return (
+    <Media>
+      {url != null ? (
+        <img src={url} alt="" />
+      ) : (
+        <FileIcon size={18} strokeWidth={2.5} aria-hidden="true" />
+      )}
+    </Media>
+  );
+};
+
 export const FileUpload: React.FC<FileUploadProps> = ({
   value,
   defaultValue = [],
@@ -203,6 +282,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   onReject,
   label = 'Drag files here or click to browse',
   id,
+  progress,
 }) => {
   const reactId = React.useId();
   const inputId = id ?? reactId;
@@ -362,21 +442,41 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       {files.length > 0 ? (
         <FileList>
-          {files.map((file, i) => (
-            <FileRow key={`${file.name}-${file.size}-${i}`}>
-              <FileIcon size={16} strokeWidth={2.5} aria-hidden="true" />
-              <FileName>{file.name}</FileName>
-              <FileSize>{formatFileSize(file.size)}</FileSize>
-              <RemoveButton
-                type="button"
-                aria-label={`Remove ${file.name}`}
-                disabled={disabled}
-                onClick={() => remove(file)}
-              >
-                <X size={16} strokeWidth={3} aria-hidden="true" />
-              </RemoveButton>
-            </FileRow>
-          ))}
+          {files.map((file, i) => {
+            const raw = progress?.(file, i);
+            const pct =
+              raw == null ? null : Math.max(0, Math.min(100, raw));
+            const uploading = pct != null && pct < 100;
+            return (
+              <FileRow key={`${file.name}-${file.size}-${i}`}>
+                <RowMedia file={file} />
+                <Meta>
+                  <FileName>{file.name}</FileName>
+                  {uploading ? (
+                    <RowBar
+                      role="progressbar"
+                      aria-valuenow={Math.round(pct)}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    >
+                      <span style={{ width: `${pct}%` }} />
+                    </RowBar>
+                  ) : null}
+                </Meta>
+                <FileSize>
+                  {pct != null ? `${Math.round(pct)}%` : formatFileSize(file.size)}
+                </FileSize>
+                <RemoveButton
+                  type="button"
+                  aria-label={`Remove ${file.name}`}
+                  disabled={disabled || uploading}
+                  onClick={() => remove(file)}
+                >
+                  <X size={16} strokeWidth={3} aria-hidden="true" />
+                </RemoveButton>
+              </FileRow>
+            );
+          })}
         </FileList>
       ) : null}
     </Wrap>
