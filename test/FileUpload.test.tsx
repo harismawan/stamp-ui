@@ -308,4 +308,20 @@ describe('FileUpload', () => {
     const removeBtn = screen.getByRole('button', { name: 'Remove up.txt' }) as HTMLButtonElement;
     expect(removeBtn.disabled).toBe(true);
   });
+
+  it('cancels the click default so it is safe nested inside a <label>', () => {
+    // A surrounding <label> would otherwise forward the click to the file input
+    // on top of the dropzone's own openPicker() → two OS pickers. The zone must
+    // preventDefault. fireEvent.click returns false when the default was cancelled.
+    renderWithTheme(<FileUpload />);
+    const zone = screen.getByRole('button');
+    const notCancelled = fireEvent.click(zone);
+    expect(notCancelled).toBe(false);
+  });
+
+  it('does not cancel the click default when disabled', () => {
+    renderWithTheme(<FileUpload disabled />);
+    const zone = screen.getByRole('button');
+    expect(fireEvent.click(zone)).toBe(true);
+  });
 });
