@@ -353,8 +353,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     e.target.value = '';
   };
 
-  const openPicker = () => {
+  const openPicker = (e?: React.SyntheticEvent) => {
     if (disabled) return;
+    // If the dropzone is nested inside a <label>, the browser's default action
+    // forwards this click to the labelable file input — which we ALSO trigger
+    // explicitly below, opening the OS picker twice. Cancelling the default
+    // leaves only our click, so the component is safe to use inside a label.
+    e?.preventDefault();
     inputRef.current?.click();
   };
 
