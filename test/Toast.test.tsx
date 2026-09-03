@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach, beforeEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
+import { act, cleanup, screen } from '@testing-library/react';
+import { ToastViewport, toast, useToastStore } from '../src/components/Toast';
 import { renderWithTheme } from './util';
-import { toast, useToastStore, ToastViewport } from '../src/components/Toast';
 
 beforeEach(() => {
   useToastStore.setState({ toasts: [] });
@@ -11,7 +11,10 @@ afterEach(() => cleanup());
 describe('Toast', () => {
   it('toast.success pushes a toast that ToastViewport renders', async () => {
     renderWithTheme(<ToastViewport />);
-    toast.success('Saved!');
+    // The store push re-renders the mounted viewport — must happen inside act.
+    act(() => {
+      toast.success('Saved!');
+    });
     expect(await screen.findByText('Saved!')).toBeTruthy();
     expect(useToastStore.getState().toasts.length).toBe(1);
   });
