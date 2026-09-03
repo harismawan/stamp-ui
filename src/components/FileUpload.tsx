@@ -1,6 +1,7 @@
 import { File as FileIcon, UploadCloud, X } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
+import { visuallyHidden } from './VisuallyHidden';
 
 export interface FileUploadProps {
   /** Controlled list of selected files. When provided, the component is controlled. */
@@ -85,15 +86,7 @@ const Hint = styled.span`
 `;
 
 const HiddenInput = styled.input`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  ${visuallyHidden}
 `;
 
 const FileList = styled.ul`

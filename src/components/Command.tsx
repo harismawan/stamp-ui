@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
+import { Kbd } from './Kbd';
 
 export interface CommandItem {
   id: string;
@@ -151,13 +152,6 @@ const OptionLabel = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`;
-
-const Shortcut = styled.span`
-  font-family: ${(p) => p.theme.font.mono};
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: ${(p) => p.theme.colors.textSubtle};
 `;
 
 const Empty = styled.div`
@@ -326,7 +320,7 @@ export function Command({
       >
         {item.icon != null && <OptionIcon aria-hidden="true">{item.icon}</OptionIcon>}
         <OptionLabel>{item.label}</OptionLabel>
-        {item.shortcut != null && <Shortcut>{item.shortcut}</Shortcut>}
+        {item.shortcut != null && <Kbd>{item.shortcut}</Kbd>}
       </Option>
     );
   };

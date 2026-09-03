@@ -164,11 +164,25 @@ export {
   type DataTableSort,
 } from './components/DataTable';
 export { DatePicker, type DatePickerProps } from './components/DatePicker';
+export { Calendar, type CalendarProps } from './components/Calendar';
+// Date helpers behind Calendar/DatePicker — exported so callers can build
+// min/max bounds and selection predicates without pulling in a date library.
+export {
+  addMonths,
+  isAfter,
+  isBefore,
+  isSameDay,
+  isWithin,
+  monthLabel,
+  startOfMonth,
+} from './components/internal/calendar';
 export {
   Command,
   type CommandProps,
   type CommandItem,
 } from './components/Command';
+export { Kbd, type KbdProps } from './components/Kbd';
+export { VisuallyHidden, visuallyHidden } from './components/VisuallyHidden';
 export {
   FileUpload,
   formatFileSize,
@@ -231,6 +245,15 @@ export {
   type TopNavProps,
   type TopNavActionsProps,
 } from './components/TopNav';
+export {
+  SideNav,
+  SideNavSection,
+  SideNavItem,
+  type SideNavProps,
+  type SideNavSectionProps,
+  type SideNavItemProps,
+} from './components/SideNav';
+export { ButtonGroup, type ButtonGroupProps } from './components/ButtonGroup';
 export {
   Footer,
   FooterColumn,
