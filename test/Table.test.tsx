@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, cleanup, within } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, screen, within } from '@testing-library/react';
+import { TBody, THead, Table, Td, Th, Tr } from '../src/components/Table';
 import { renderWithTheme } from './util';
-import { Table, THead, TBody, Tr, Th, Td } from '../src/components/Table';
 
 afterEach(cleanup);
 

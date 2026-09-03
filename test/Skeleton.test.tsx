@@ -1,11 +1,6 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
+import { Skeleton, SkeletonCircle, SkeletonGroup, SkeletonText } from '../src/components/Skeleton';
 import { renderWithTheme } from './util';
-import {
-  Skeleton,
-  SkeletonText,
-  SkeletonCircle,
-  SkeletonGroup,
-} from '../src/components/Skeleton';
 
 describe('Skeleton', () => {
   it('renders with the given width', () => {
@@ -23,7 +18,9 @@ describe('Skeleton', () => {
 
   it('SkeletonText respects an explicit lines count', () => {
     const { container } = renderWithTheme(<SkeletonText lines={5} data-testid="five" />);
-    expect((container.querySelector('[data-testid="five"]') as HTMLElement).children.length).toBe(5);
+    expect((container.querySelector('[data-testid="five"]') as HTMLElement).children.length).toBe(
+      5,
+    );
   });
 
   it('SkeletonCircle renders with equal width/height from $size', () => {

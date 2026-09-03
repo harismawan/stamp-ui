@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, fireEvent, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { Tab, TabList, TabPanel, Tabs } from '../src/components/Tabs';
 import { renderWithTheme } from './util';
-import { Tabs, TabList, Tab, TabPanel } from '../src/components/Tabs';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test would trip "Found multiple elements" in the full suite.
@@ -20,11 +20,6 @@ function Example() {
       <TabPanel value="c">Panel C</TabPanel>
     </Tabs>
   );
-}
-
-// Controlled wrapper so onChange actually updates state.
-function Controlled() {
-  return <Example />;
 }
 
 describe('Tabs', () => {

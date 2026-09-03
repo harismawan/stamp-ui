@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Combobox, type ComboboxOption } from '../src/components/Combobox';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -136,7 +136,7 @@ describe('Combobox', () => {
 
   it('shows the empty row with default and custom emptyText', async () => {
     const user = userEvent.setup();
-    const { rerender } = renderWithTheme(<Combobox options={OPTIONS} />);
+    renderWithTheme(<Combobox options={OPTIONS} />);
     await user.click(getInput());
     await user.type(getInput(), 'zzz');
     await waitFor(() => expect(screen.getByText('No results')).toBeTruthy());
@@ -295,7 +295,9 @@ describe('Combobox', () => {
       // Stays open.
       expect(screen.getByRole('listbox')).toBeTruthy();
       // Chip rendered (its remove button is unique to a chip).
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Remove Apple' })).toBeTruthy());
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: 'Remove Apple' })).toBeTruthy(),
+      );
 
       await user.click(screen.getByRole('option', { name: 'Banana' }));
       expect(onChange.mock.calls[1][0]).toEqual(['apple', 'banana']);
@@ -309,7 +311,12 @@ describe('Combobox', () => {
       const user = userEvent.setup();
       const onChange = mock((_: string[]) => {});
       renderWithTheme(
-        <Combobox multiple options={OPTIONS} defaultValue={['apple', 'banana']} onChange={onChange} />,
+        <Combobox
+          multiple
+          options={OPTIONS}
+          defaultValue={['apple', 'banana']}
+          onChange={onChange}
+        />,
       );
       await user.click(screen.getByRole('button', { name: 'Remove Apple' }));
       expect(onChange).toHaveBeenCalledTimes(1);
@@ -320,7 +327,12 @@ describe('Combobox', () => {
       const user = userEvent.setup();
       const onChange = mock((_: string[]) => {});
       renderWithTheme(
-        <Combobox multiple options={OPTIONS} defaultValue={['apple', 'banana']} onChange={onChange} />,
+        <Combobox
+          multiple
+          options={OPTIONS}
+          defaultValue={['apple', 'banana']}
+          onChange={onChange}
+        />,
       );
       const input = getInput();
       await user.click(input);
@@ -347,7 +359,13 @@ describe('Combobox', () => {
       const user = userEvent.setup();
       const onChange = mock((_: string[]) => {});
       renderWithTheme(
-        <Combobox multiple options={OPTIONS} defaultValue={['apple', 'banana']} clearable onChange={onChange} />,
+        <Combobox
+          multiple
+          options={OPTIONS}
+          defaultValue={['apple', 'banana']}
+          clearable
+          onChange={onChange}
+        />,
       );
       await user.click(screen.getByRole('button', { name: 'Clear selection' }));
       expect(onChange).toHaveBeenCalledTimes(1);

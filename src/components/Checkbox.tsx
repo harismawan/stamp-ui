@@ -1,6 +1,6 @@
+import { Check, Minus } from 'lucide-react';
 import React from 'react';
 import styled from 'styled-components';
-import { Check, Minus } from 'lucide-react';
 
 export interface CheckboxProps
   extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'type'> {

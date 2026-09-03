@@ -1,19 +1,19 @@
-import * as React from 'react';
-import styled from 'styled-components';
 import {
-  useFloating,
+  FloatingFocusManager,
+  FloatingPortal,
+  type Placement,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   useClick,
   useDismiss,
-  useRole,
+  useFloating,
   useInteractions,
-  FloatingPortal,
-  FloatingFocusManager,
-  type Placement,
+  useRole,
 } from '@floating-ui/react';
+import * as React from 'react';
+import styled from 'styled-components';
 
 export interface PopoverProps {
   trigger: React.ReactElement;
@@ -49,11 +49,7 @@ export function Popover({ trigger, children, placement = 'bottom' }: PopoverProp
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: 'dialog' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
   const child = React.Children.only(trigger);
 
@@ -69,11 +65,7 @@ export function Popover({ trigger, children, placement = 'bottom' }: PopoverProp
       {open && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false}>
-            <Panel
-              ref={refs.setFloating}
-              style={floatingStyles}
-              {...getFloatingProps()}
-            >
+            <Panel ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
               {children}
             </Panel>
           </FloatingFocusManager>

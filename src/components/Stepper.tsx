@@ -92,8 +92,7 @@ const Labels = styled.div<{ $orientation: StepperOrientation }>`
 const Label = styled.span<{ $status: StepStatus }>`
   font-weight: ${(p) => (p.$status === 'upcoming' ? 600 : 800)};
   font-size: 14px;
-  color: ${(p) =>
-    p.$status === 'upcoming' ? p.theme.colors.textMuted : p.theme.colors.text};
+  color: ${(p) => (p.$status === 'upcoming' ? p.theme.colors.textMuted : p.theme.colors.text)};
 `;
 
 const Description = styled.span`
@@ -138,11 +137,7 @@ export function Stepper({ steps, active, orientation = 'horizontal' }: StepperPr
               </Labels>
             </StepRow>
             {!isLast && (
-              <Connector
-                $orientation={orientation}
-                $done={index < active}
-                aria-hidden="true"
-              />
+              <Connector $orientation={orientation} $done={index < active} aria-hidden="true" />
             )}
           </Item>
         );

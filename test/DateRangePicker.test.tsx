@@ -1,12 +1,9 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import * as React from 'react';
-import { screen, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import * as React from 'react';
+import { type DateRange, DateRangePicker } from '../src/components/DateRangePicker';
 import { renderWithTheme } from './util';
-import {
-  DateRangePicker,
-  type DateRange,
-} from '../src/components/DateRangePicker';
 
 afterEach(cleanup);
 
@@ -21,9 +18,7 @@ const MAY = new Date(2026, 4, 1);
 
 // The trigger's accessible name is the formatted start date (locale-dependent),
 // so match against the actual formatted string rather than the long month name.
-const MAY_TRIGGER = new RegExp(
-  dayLabel(MAY).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-);
+const MAY_TRIGGER = new RegExp(dayLabel(MAY).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 
 describe('DateRangePicker', () => {
   it('renders the placeholder when no range is set', () => {
@@ -184,9 +179,7 @@ describe('DateRangePicker', () => {
     expect(arg.start).toBeNull();
     expect(arg.end).toBeNull();
     // Trigger falls back to the placeholder once cleared.
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: /Select range/ })).toBeTruthy(),
-    );
+    await waitFor(() => expect(screen.getByRole('button', { name: /Select range/ })).toBeTruthy());
   });
 
   it('closes on Escape', async () => {
@@ -213,7 +206,9 @@ describe('DateRangePicker', () => {
     expect(onChange).toHaveBeenCalledTimes(0);
     expect(
       screen.getByRole('button', {
-        name: new RegExp(`${dayLabel(start)} - ${dayLabel(end)}`.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')),
+        name: new RegExp(
+          `${dayLabel(start)} - ${dayLabel(end)}`.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        ),
       }),
     ).toBeTruthy();
   });
@@ -245,9 +240,7 @@ describe('DateRangePicker', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
 
     // The trigger now shows a completed "start - end" range.
-    expect(
-      screen.getByRole('button', { name: /\d.*-.*\d/ }),
-    ).toBeTruthy();
+    expect(screen.getByRole('button', { name: /\d.*-.*\d/ })).toBeTruthy();
   });
 
   it('selects a range with the keyboard (roving focus + Enter)', async () => {
@@ -300,7 +293,9 @@ describe('DateRangePicker', () => {
     renderWithTheme(<DateRangePicker defaultValue={{ start: MAY, end: null }} />);
     await user.click(screen.getByRole('button', { name: MAY_TRIGGER }));
     const dialog = await screen.findByRole('dialog');
-    expect(dialog.getAttribute('aria-label') ?? dialog.getAttribute('aria-labelledby')).toBeTruthy();
+    expect(
+      dialog.getAttribute('aria-label') ?? dialog.getAttribute('aria-labelledby'),
+    ).toBeTruthy();
     // The accessible name resolves to a non-empty string.
     expect(screen.getByRole('dialog', { name: /choose date range/i })).toBeTruthy();
   });

@@ -1,6 +1,6 @@
+import { Search } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Search } from 'lucide-react';
 
 export interface CommandItem {
   id: string;
@@ -280,8 +280,7 @@ export function Command({
     });
   }, [navigable.length]);
 
-  const activeId =
-    navigable.length > 0 ? `${baseId}-opt-${navigable[activeIndex]?.id}` : undefined;
+  const activeId = navigable.length > 0 ? `${baseId}-opt-${navigable[activeIndex]?.id}` : undefined;
 
   const selectItem = (item: CommandItem) => {
     if (item.disabled) return;

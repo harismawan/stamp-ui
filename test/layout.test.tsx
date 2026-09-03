@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'bun:test';
+import { afterEach, describe, expect, it } from 'bun:test';
 import { cleanup } from '@testing-library/react';
+import { Box, Container, Grid, HStack, Stack, VStack } from '../src/components/layout';
 import { renderWithTheme } from './util';
-import { Box, Stack, HStack, VStack, Grid, Container } from '../src/components/layout';
 
 afterEach(() => cleanup());
 

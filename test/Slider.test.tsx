@@ -1,8 +1,8 @@
-import { test, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, expect, mock, test } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import { fireEvent } from '@testing-library/react';
-import { renderWithTheme } from './util';
 import { Slider } from '../src/components/Slider';
+import { renderWithTheme } from './util';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test leaks into the next ("Found multiple elements") in the full suite.
@@ -27,7 +27,7 @@ test('Slider uses default min=0 max=100 step=1 when omitted', () => {
 });
 
 test('Slider fires onChange with a number on input change', () => {
-  const onChange = mock((v: number) => {});
+  const onChange = mock((_v: number) => {});
   renderWithTheme(<Slider value={40} onChange={onChange} />);
   const input = screen.getByRole('slider') as HTMLInputElement;
   fireEvent.change(input, { target: { value: '75' } });

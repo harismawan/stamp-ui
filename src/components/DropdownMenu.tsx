@@ -1,22 +1,22 @@
-import * as React from 'react';
-import styled from 'styled-components';
 import {
-  useFloating,
+  FloatingFocusManager,
+  FloatingList,
+  FloatingPortal,
+  type Placement,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   useClick,
   useDismiss,
-  useRole,
-  useListNavigation,
+  useFloating,
   useInteractions,
   useListItem,
-  FloatingList,
-  FloatingPortal,
-  FloatingFocusManager,
-  type Placement,
+  useListNavigation,
+  useRole,
 } from '@floating-ui/react';
+import * as React from 'react';
+import styled from 'styled-components';
 
 interface MenuContextValue {
   open: boolean;
@@ -91,7 +91,16 @@ export function Menu({ children, placement = 'bottom-start' }: MenuProps) {
       context,
       listRef,
     }),
-    [open, activeIndex, getReferenceProps, getFloatingProps, getItemProps, refs, floatingStyles, context],
+    [
+      open,
+      activeIndex,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      refs,
+      floatingStyles,
+      context,
+    ],
   );
 
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
@@ -129,24 +138,25 @@ export interface MenuButtonProps extends React.ComponentPropsWithoutRef<'button'
   children: React.ReactNode;
 }
 
-export const MenuButton = React.forwardRef<HTMLButtonElement, MenuButtonProps>(
-  function MenuButton({ children, ...rest }, ref) {
-    const { refs, getReferenceProps } = useMenuContext();
-    return (
-      <TriggerButton
-        type="button"
-        ref={(node) => {
-          refs.setReference(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        {...getReferenceProps(rest)}
-      >
-        {children}
-      </TriggerButton>
-    );
-  },
-);
+export const MenuButton = React.forwardRef<HTMLButtonElement, MenuButtonProps>(function MenuButton(
+  { children, ...rest },
+  ref,
+) {
+  const { refs, getReferenceProps } = useMenuContext();
+  return (
+    <TriggerButton
+      type="button"
+      ref={(node) => {
+        refs.setReference(node);
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      }}
+      {...getReferenceProps(rest)}
+    >
+      {children}
+    </TriggerButton>
+  );
+});
 
 const List = styled.div`
   background: ${(p) => p.theme.colors.surface};
@@ -167,8 +177,7 @@ export interface MenuListProps {
 }
 
 export function MenuList({ children }: MenuListProps) {
-  const { open, refs, floatingStyles, context, getFloatingProps, listRef, setActiveIndex } =
-    useMenuContext();
+  const { open, refs, floatingStyles, context, getFloatingProps, listRef } = useMenuContext();
   if (!open) return null;
   return (
     <FloatingPortal>

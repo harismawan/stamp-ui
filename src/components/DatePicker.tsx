@@ -1,27 +1,27 @@
-import * as React from 'react';
-import styled from 'styled-components';
 import {
-  useFloating,
+  FloatingFocusManager,
+  FloatingPortal,
+  type Placement,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   useClick,
   useDismiss,
-  useRole,
+  useFloating,
   useInteractions,
-  FloatingPortal,
-  FloatingFocusManager,
-  type Placement,
+  useRole,
 } from '@floating-ui/react';
 import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import * as React from 'react';
+import styled from 'styled-components';
 import {
-  startOfMonth,
+  MonthGrid,
   addMonths,
   isSameDay,
   isWithin,
   monthLabel,
-  MonthGrid,
+  startOfMonth,
 } from './internal/calendar';
 
 export interface DatePickerProps {
@@ -176,9 +176,7 @@ export function DatePicker(props: DatePickerProps): React.ReactElement {
   } = props;
 
   const isControlled = value !== undefined;
-  const [internalValue, setInternalValue] = React.useState<Date | null>(
-    defaultValue ?? null,
-  );
+  const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
   const selected = isControlled ? (value ?? null) : internalValue;
 
   const [open, setOpen] = React.useState(false);
@@ -207,11 +205,7 @@ export function DatePicker(props: DatePickerProps): React.ReactElement {
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: 'dialog' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
 
   // When the popover opens, sync the viewed month to the current selection (or
   // today) and seed roving focus on that day so arrow keys work immediately.
@@ -290,11 +284,7 @@ export function DatePicker(props: DatePickerProps): React.ReactElement {
       </TriggerWrap>
       {open && (
         <FloatingPortal>
-          <FloatingFocusManager
-            context={context}
-            modal={false}
-            initialFocus={initialFocusRef}
-          >
+          <FloatingFocusManager context={context} modal={false} initialFocus={initialFocusRef}>
             <Panel
               ref={refs.setFloating}
               style={floatingStyles}

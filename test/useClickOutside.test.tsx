@@ -1,5 +1,5 @@
-import { describe, it, expect, mock, afterEach } from 'bun:test';
-import { render, fireEvent, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import { useRef } from 'react';
 import { useClickOutside } from '../src/hooks/useClickOutside';
 

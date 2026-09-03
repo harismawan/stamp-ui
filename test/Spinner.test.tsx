@@ -1,11 +1,11 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { render, screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, render, screen } from '@testing-library/react';
+import { Spinner } from '../src/components/Spinner';
+import { StampProvider } from '../src/provider';
+import { darkTheme } from '../src/theme';
 // Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
 // `allowImportingTsExtensions`, so `.tsx` import suffixes fail TS5097 there.
 import { renderWithTheme } from './util';
-import { StampProvider } from '../src/provider';
-import { darkTheme } from '../src/theme';
-import { Spinner } from '../src/components/Spinner';
 
 // happy-dom is registered once for the whole `bun test` run (test/setup.ts),
 // so every file shares one global `document`. Without unmounting after each

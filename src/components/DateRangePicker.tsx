@@ -1,19 +1,19 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import {
-  useFloating,
+  FloatingFocusManager,
+  FloatingPortal,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   useClick,
   useDismiss,
-  useRole,
+  useFloating,
   useInteractions,
-  FloatingPortal,
-  FloatingFocusManager,
+  useRole,
 } from '@floating-ui/react';
+import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import * as React from 'react';
+import styled from 'styled-components';
 import {
   MonthGrid,
   addMonths,
@@ -201,9 +201,7 @@ export function DateRangePicker({
   id,
 }: DateRangePickerProps): React.ReactElement {
   const isControlled = value !== undefined;
-  const [internal, setInternal] = React.useState<DateRange>(
-    () => defaultValue ?? EMPTY_RANGE,
-  );
+  const [internal, setInternal] = React.useState<DateRange>(() => defaultValue ?? EMPTY_RANGE);
   const range = isControlled ? (value as DateRange) : internal;
 
   const [open, setOpen] = React.useState(false);
@@ -375,11 +373,7 @@ export function DateRangePicker({
                 >
                   <ChevronLeft size={18} strokeWidth={2.5} aria-hidden="true" />
                 </NavButton>
-                <NavButton
-                  type="button"
-                  aria-label="Next month"
-                  onClick={() => shiftMonths(1)}
-                >
+                <NavButton type="button" aria-label="Next month" onClick={() => shiftMonths(1)}>
                   <ChevronRight size={18} strokeWidth={2.5} aria-hidden="true" />
                 </NavButton>
               </Header>

@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { DatePicker } from '../src/components/DatePicker';
 import { monthLabel } from '../src/components/internal/calendar';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -58,9 +58,7 @@ describe('DatePicker', () => {
     await waitFor(() => expect(screen.getByRole('grid')).toBeTruthy());
 
     const target = new Date(2026, 4, 20);
-    await user.click(
-      screen.getByRole('button', { name: target.toLocaleDateString() }),
-    );
+    await user.click(screen.getByRole('button', { name: target.toLocaleDateString() }));
 
     expect(onChange).toHaveBeenCalledTimes(1);
     const arg = onChange.mock.calls[0][0] as Date;
@@ -79,15 +77,11 @@ describe('DatePicker', () => {
     expect(screen.getByText(monthLabel(new Date(2026, 4, 1)))).toBeTruthy();
 
     await user.click(screen.getByRole('button', { name: 'Previous month' }));
-    await waitFor(() =>
-      expect(screen.getByText(monthLabel(new Date(2026, 3, 1)))).toBeTruthy(),
-    );
+    await waitFor(() => expect(screen.getByText(monthLabel(new Date(2026, 3, 1)))).toBeTruthy());
 
     await user.click(screen.getByRole('button', { name: 'Next month' }));
     await user.click(screen.getByRole('button', { name: 'Next month' }));
-    await waitFor(() =>
-      expect(screen.getByText(monthLabel(new Date(2026, 5, 1)))).toBeTruthy(),
-    );
+    await waitFor(() => expect(screen.getByText(monthLabel(new Date(2026, 5, 1)))).toBeTruthy());
   });
 
   it('disables out-of-range days according to min/max', async () => {
@@ -121,11 +115,7 @@ describe('DatePicker', () => {
     const user = userEvent.setup();
     const onChange = mock((_d: Date | null) => {});
     renderWithTheme(
-      <DatePicker
-        defaultValue={MAY_2026}
-        min={new Date(2026, 4, 10)}
-        onChange={onChange}
-      />,
+      <DatePicker defaultValue={MAY_2026} min={new Date(2026, 4, 10)} onChange={onChange} />,
     );
     await user.click(getTrigger());
     await waitFor(() => expect(screen.getByRole('grid')).toBeTruthy());
@@ -141,9 +131,7 @@ describe('DatePicker', () => {
   it('renders a clear control that resets to null when clearable', async () => {
     const user = userEvent.setup();
     const onChange = mock((_d: Date | null) => {});
-    renderWithTheme(
-      <DatePicker defaultValue={MAY_2026} clearable onChange={onChange} />,
-    );
+    renderWithTheme(<DatePicker defaultValue={MAY_2026} clearable onChange={onChange} />);
     await user.click(screen.getByRole('button', { name: 'Clear date' }));
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange.mock.calls[0][0]).toBeNull();
@@ -215,17 +203,17 @@ describe('DatePicker', () => {
 
     // Initial focus lands on the selected day cell, not a nav button.
     await waitFor(() =>
-      expect(
-        (document.activeElement as HTMLElement)?.getAttribute('aria-label'),
-      ).toBe(MAY_2026.toLocaleDateString()),
+      expect((document.activeElement as HTMLElement)?.getAttribute('aria-label')).toBe(
+        MAY_2026.toLocaleDateString(),
+      ),
     );
 
     // Arrow navigation moves the roving day immediately, with no Tab needed.
     await user.keyboard('{ArrowRight}');
     await waitFor(() =>
-      expect(
-        (document.activeElement as HTMLElement)?.getAttribute('aria-label'),
-      ).toBe(new Date(2026, 4, 16).toLocaleDateString()),
+      expect((document.activeElement as HTMLElement)?.getAttribute('aria-label')).toBe(
+        new Date(2026, 4, 16).toLocaleDateString(),
+      ),
     );
   });
 
@@ -275,26 +263,20 @@ describe('DatePicker', () => {
     // The selected day (May 1) holds roving focus; arrow left across boundary.
     const grid = screen.getByRole('grid');
     fireEvent.keyDown(grid, { key: 'ArrowLeft' });
-    await waitFor(() =>
-      expect(screen.getByText(monthLabel(new Date(2026, 3, 1)))).toBeTruthy(),
-    );
+    await waitFor(() => expect(screen.getByText(monthLabel(new Date(2026, 3, 1)))).toBeTruthy());
     // Grid stays mounted with the previous month showing.
     expect(screen.getByRole('grid')).toBeTruthy();
   });
 
   it('uses a custom format function when provided', () => {
-    renderWithTheme(
-      <DatePicker defaultValue={MAY_2026} format={(d) => `Y${d.getFullYear()}`} />,
-    );
+    renderWithTheme(<DatePicker defaultValue={MAY_2026} format={(d) => `Y${d.getFullYear()}`} />);
     expect(getTrigger().textContent).toContain('Y2026');
   });
 
   it('clears via keyboard on the clear control', async () => {
     const user = userEvent.setup();
     const onChange = mock((_d: Date | null) => {});
-    renderWithTheme(
-      <DatePicker defaultValue={MAY_2026} clearable onChange={onChange} />,
-    );
+    renderWithTheme(<DatePicker defaultValue={MAY_2026} clearable onChange={onChange} />);
     const clear = screen.getByRole('button', { name: 'Clear date' });
     // Real <button>: keyboard activation goes through native click semantics,
     // not a hand-rolled keydown handler.

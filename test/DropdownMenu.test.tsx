@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Menu, MenuButton, MenuItem, MenuList } from '../src/components/DropdownMenu';
 import { renderWithTheme } from './util';
-import { Menu, MenuButton, MenuList, MenuItem } from '../src/components/DropdownMenu';
 
 afterEach(cleanup);
 

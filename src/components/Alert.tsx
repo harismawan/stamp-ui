@@ -1,6 +1,6 @@
+import { AlertTriangle, CheckCircle2, Info, X, XCircle } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { Info, CheckCircle2, AlertTriangle, XCircle, X } from 'lucide-react';
 
 export type AlertVariant = 'info' | 'success' | 'warn' | 'danger';
 

@@ -23,7 +23,8 @@
         "useNodejsImportProtocol": "off",
         "useImportType": "off",
         "useTemplate": "off",
-        "useSelfClosingElements": "off"
+        "useSelfClosingElements": "off",
+        "noNonNullAssertion": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",
@@ -37,7 +38,8 @@
       "complexity": {
         "useArrowFunction": "off",
         "noForEach": "off",
-        "noUselessTernary": "off"
+        "noUselessTernary": "off",
+        "noUselessSwitchCase": "off"
       },
       "a11y": {
         "useKeyWithClickEvents": "off",

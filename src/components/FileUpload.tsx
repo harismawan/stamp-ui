@@ -1,6 +1,6 @@
+import { File as FileIcon, UploadCloud, X } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { UploadCloud, File as FileIcon, X } from 'lucide-react';
 
 export interface FileUploadProps {
   /** Controlled list of selected files. When provided, the component is controlled. */
@@ -58,8 +58,7 @@ const Zone = styled.div<{ $dragging: boolean; $disabled: boolean }>`
   text-align: center;
   font-family: ${(p) => p.theme.font.body};
   color: ${(p) => p.theme.colors.text};
-  background: ${(p) =>
-    p.$dragging ? p.theme.colors.primarySoft : p.theme.colors.surface};
+  background: ${(p) => (p.$dragging ? p.theme.colors.primarySoft : p.theme.colors.surface)};
   border: 2px solid ${(p) => p.theme.colors.border};
   border-radius: ${(p) => p.theme.radii.md};
   box-shadow: ${(p) => (p.$dragging ? p.theme.shadow.stamp : p.theme.shadow.none)};
@@ -338,9 +337,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       // rather than wiping it with an empty commit.
       if (!multiple && accepted.length === 0) return;
 
-      const changed =
-        accepted.length !== files.length ||
-        accepted.some((f, i) => f !== files[i]);
+      const changed = accepted.length !== files.length || accepted.some((f, i) => f !== files[i]);
       if (changed) commit(accepted);
     },
     [disabled, multiple, files, maxSize, accept, maxFiles, onReject, commit],
@@ -449,8 +446,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         <FileList>
           {files.map((file, i) => {
             const raw = progress?.(file, i);
-            const pct =
-              raw == null ? null : Math.max(0, Math.min(100, raw));
+            const pct = raw == null ? null : Math.max(0, Math.min(100, raw));
             const uploading = pct != null && pct < 100;
             return (
               <FileRow key={`${file.name}-${file.size}-${i}`}>

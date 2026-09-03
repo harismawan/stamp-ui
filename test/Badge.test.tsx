@@ -1,7 +1,7 @@
-import { test, expect } from 'bun:test';
+import { expect, test } from 'bun:test';
 import { screen } from '@testing-library/react';
-import { renderWithTheme } from './util';
 import { Badge } from '../src/components/Badge';
+import { renderWithTheme } from './util';
 
 test('Badge renders its children text', () => {
   renderWithTheme(<Badge>New</Badge>);

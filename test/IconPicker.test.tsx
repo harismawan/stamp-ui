@@ -1,10 +1,10 @@
-import { describe, it, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { DEFAULT_ICONS, IconPicker } from '../src/components/IconPicker';
 // Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
 // `allowImportingTsExtensions`, so `.tsx` import suffixes fail TS5097 there.
 import { renderWithTheme } from './util';
-import { IconPicker, DEFAULT_ICONS } from '../src/components/IconPicker';
 
 // happy-dom is shared across the whole `bun test` run; without unmounting after
 // each test, renders accumulate in the global document and `getByRole` throws

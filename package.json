@@ -21,9 +21,7 @@
   "bugs": "https://github.com/harismawan/stamp-ui/issues",
   "type": "module",
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -33,6 +31,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json",
+    "lint": "biome ci .",
+    "format": "biome check --fix .",
     "test": "bun test",
     "prepublishOnly": "bun run build"
   },

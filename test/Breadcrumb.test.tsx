@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
-import { renderWithTheme } from './util';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import { Breadcrumb, BreadcrumbItem } from '../src/components/Breadcrumb';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
