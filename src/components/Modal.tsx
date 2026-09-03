@@ -1,5 +1,13 @@
+import {
+  FloatingFocusManager,
+  FloatingOverlay,
+  FloatingPortal,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from '@floating-ui/react';
 import { X } from 'lucide-react';
-import { useEffect, useId, useRef } from 'react';
+import { useId } from 'react';
 import styled from 'styled-components';
 
 export interface ModalProps {
@@ -10,9 +18,7 @@ export interface ModalProps {
   children?: React.ReactNode;
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
+const Overlay = styled(FloatingOverlay)`
   background: ${(p) => p.theme.colors.overlay};
   display: grid;
   place-items: center;
@@ -95,44 +101,42 @@ const CloseBtn = styled.button`
 `;
 
 export function Modal({ open, onClose, title, size = 'md', children }: ModalProps) {
-  const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose?.();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-
-  useEffect(() => {
-    if (open && panelRef.current) {
-      panelRef.current.focus();
-    }
-  }, [open]);
+  const { refs, context } = useFloating({
+    open,
+    onOpenChange: (next) => {
+      if (!next) onClose?.();
+    },
+  });
+  // Escape only — the overlay's own click handler covers outside presses.
+  const { getFloatingProps } = useInteractions([useDismiss(context, { outsidePress: false })]);
 
   if (!open) return null;
   return (
-    <Overlay onClick={() => onClose?.()}>
-      <Panel
-        ref={panelRef}
-        $size={size}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-        tabIndex={-1}
-      >
-        <Header>
-          <Title id={titleId}>{title}</Title>
-          <CloseBtn type="button" onClick={() => onClose?.()} aria-label="Close">
-            <X size={16} strokeWidth={2.5} />
-          </CloseBtn>
-        </Header>
-        <Body>{children}</Body>
-      </Panel>
-    </Overlay>
+    <FloatingPortal>
+      <Overlay lockScroll onClick={() => onClose?.()}>
+        <FloatingFocusManager context={context}>
+          <Panel
+            ref={refs.setFloating}
+            $size={size}
+            {...getFloatingProps({
+              onClick: (e) => e.stopPropagation(),
+            })}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            tabIndex={-1}
+          >
+            <Header>
+              <Title id={titleId}>{title}</Title>
+              <CloseBtn type="button" onClick={() => onClose?.()} aria-label="Close">
+                <X size={16} strokeWidth={2.5} />
+              </CloseBtn>
+            </Header>
+            <Body>{children}</Body>
+          </Panel>
+        </FloatingFocusManager>
+      </Overlay>
+    </FloatingPortal>
   );
 }

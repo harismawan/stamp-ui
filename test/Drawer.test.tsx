@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Drawer } from '../src/components/Drawer';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -69,6 +69,35 @@ describe('Drawer', () => {
       </Drawer>,
     );
     expect(screen.getByRole('dialog').getAttribute('data-side')).toBe('right');
+  });
+
+  it('locks body scroll while open and releases it on close', () => {
+    const { rerender } = renderWithTheme(
+      <Drawer open onClose={() => {}}>
+        <p>Body</p>
+      </Drawer>,
+    );
+    expect(document.body.style.overflow).toBe('hidden');
+    rerender(
+      <Drawer open={false} onClose={() => {}}>
+        <p>Body</p>
+      </Drawer>,
+    );
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it('traps Tab inside the panel', async () => {
+    const user = userEvent.setup();
+    renderWithTheme(
+      <Drawer open onClose={() => {}} title="Settings">
+        <button type="button">inside</button>
+      </Drawer>,
+    );
+    const dialog = screen.getByRole('dialog');
+    for (let i = 0; i < 4; i++) {
+      await user.tab();
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    }
   });
 
   it('moves focus into the panel when opened', async () => {

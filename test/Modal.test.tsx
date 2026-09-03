@@ -77,6 +77,67 @@ describe('Modal', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it('portals out of its parent so ancestor overflow cannot clip it', () => {
+    const { container } = renderWithTheme(
+      <div style={{ overflow: 'hidden' }}>
+        <Modal open onClose={() => {}} title="Hi">
+          body content
+        </Modal>
+      </div>,
+    );
+    const dialog = screen.getByRole('dialog');
+    expect(container.contains(dialog)).toBe(false);
+    expect(document.body.contains(dialog)).toBe(true);
+  });
+
+  it('locks body scroll while open and releases it on close', () => {
+    const { rerender } = renderWithTheme(
+      <Modal open onClose={() => {}} title="Hi">
+        body
+      </Modal>,
+    );
+    expect(document.body.style.overflow).toBe('hidden');
+    rerender(
+      <Modal open={false} onClose={() => {}} title="Hi">
+        body
+      </Modal>,
+    );
+    expect(document.body.style.overflow).not.toBe('hidden');
+  });
+
+  it('traps Tab inside the panel', async () => {
+    renderWithTheme(
+      <Modal open onClose={() => {}} title="Hi">
+        <button type="button">inside</button>
+      </Modal>,
+    );
+    const dialog = screen.getByRole('dialog');
+    // Tab past every tabbable in the panel; focus must wrap, never escape.
+    for (let i = 0; i < 4; i++) {
+      await userEvent.tab();
+      expect(dialog.contains(document.activeElement)).toBe(true);
+    }
+  });
+
+  it('restores focus to the trigger when closed', async () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    const { rerender } = renderWithTheme(
+      <Modal open onClose={() => {}} title="Hi">
+        body
+      </Modal>,
+    );
+    rerender(
+      <Modal open={false} onClose={() => {}} title="Hi">
+        body
+      </Modal>,
+    );
+    await waitFor(() => expect(document.activeElement).toBe(trigger));
+    trigger.remove();
+  });
+
   it('closes on overlay click but not on panel click', async () => {
     const onClose = mock(() => {});
     renderWithTheme(
