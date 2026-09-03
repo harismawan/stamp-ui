@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
-import { lightTheme } from '../src/theme';
 import { FileUpload, type FileUploadRejection } from '../src/components/FileUpload';
+import { lightTheme } from '../src/theme';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -82,9 +82,7 @@ describe('FileUpload', () => {
   it('rejects extra files over maxFiles with reason too-many', async () => {
     const onChange = mock((_files: File[]) => {});
     const onReject = mock((_r: FileUploadRejection[]) => {});
-    renderWithTheme(
-      <FileUpload multiple maxFiles={1} onChange={onChange} onReject={onReject} />,
-    );
+    renderWithTheme(<FileUpload multiple maxFiles={1} onChange={onChange} onReject={onReject} />);
     await userEvent.upload(getFileInput(), [makeFile('one.txt'), makeFile('two.txt')]);
     await waitFor(() => expect(onReject).toHaveBeenCalledTimes(1));
     const rej = onReject.mock.calls[0][0];
@@ -98,9 +96,7 @@ describe('FileUpload', () => {
     // drop path is what exercises the component's own accept validation.
     const onChange = mock((_files: File[]) => {});
     const onReject = mock((_r: FileUploadRejection[]) => {});
-    renderWithTheme(
-      <FileUpload accept=".png,image/*" onChange={onChange} onReject={onReject} />,
-    );
+    renderWithTheme(<FileUpload accept=".png,image/*" onChange={onChange} onReject={onReject} />);
     const zone = screen.getByRole('button');
     const file = makeFile('notes.txt', { type: 'text/plain' });
     fireEvent.drop(zone, { dataTransfer: { files: [file] } });
@@ -173,9 +169,7 @@ describe('FileUpload', () => {
   it('keeps the current single-mode file when a new drop is fully rejected', async () => {
     const onChange = mock((_files: File[]) => {});
     const onReject = mock((_r: FileUploadRejection[]) => {});
-    renderWithTheme(
-      <FileUpload maxSize={100} onChange={onChange} onReject={onReject} />,
-    );
+    renderWithTheme(<FileUpload maxSize={100} onChange={onChange} onReject={onReject} />);
     // Grab the dropzone before any file row (also a button) is rendered.
     const zone = screen.getByRole('button');
     // Select a valid file first.
@@ -246,9 +240,7 @@ describe('FileUpload', () => {
     const zone = screen.getByRole('button');
     // Disabled zones never enter the dragging state; firing dragleave must be a
     // no-op (and must not throw on the relatedTarget guard).
-    expect(() =>
-      fireEvent.dragLeave(zone, { relatedTarget: document.body }),
-    ).not.toThrow();
+    expect(() => fireEvent.dragLeave(zone, { relatedTarget: document.body })).not.toThrow();
     expect(getComputedStyle(zone).boxShadow).toBe(lightTheme.shadow.none);
   });
 

@@ -3,8 +3,7 @@ import styled from 'styled-components';
 
 export type ProgressVariant = 'primary' | 'success' | 'danger';
 
-export interface ProgressProps
-  extends Omit<React.ComponentPropsWithoutRef<'div'>, 'role'> {
+export interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'role'> {
   value: number;
   max?: number;
   $variant?: ProgressVariant;

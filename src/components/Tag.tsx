@@ -1,6 +1,6 @@
+import { X } from 'lucide-react';
 import React from 'react';
 import styled from 'styled-components';
-import { X } from 'lucide-react';
 
 export interface TagProps extends React.ComponentPropsWithoutRef<'span'> {
   children: React.ReactNode;

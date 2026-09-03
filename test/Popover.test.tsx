@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, cleanup, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Popover } from '../src/components/Popover';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 

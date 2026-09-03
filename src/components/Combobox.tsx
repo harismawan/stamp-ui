@@ -1,19 +1,19 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { ChevronDown, Check, X } from 'lucide-react';
 import {
-  useFloating,
+  FloatingPortal,
   autoUpdate,
-  offset,
   flip,
+  offset,
   shift,
   size,
   useDismiss,
-  useRole,
-  useListNavigation,
+  useFloating,
   useInteractions,
-  FloatingPortal,
+  useListNavigation,
+  useRole,
 } from '@floating-ui/react';
+import { Check, ChevronDown, X } from 'lucide-react';
+import * as React from 'react';
+import styled from 'styled-components';
 import { Tag } from './Tag';
 
 export interface ComboboxOption {
@@ -324,9 +324,7 @@ export function Combobox(props: ComboboxProps) {
     if (opt.disabled) return;
     if (multiple) {
       const exists = selected.includes(opt.value);
-      const next = exists
-        ? selected.filter((v) => v !== opt.value)
-        : [...selected, opt.value];
+      const next = exists ? selected.filter((v) => v !== opt.value) : [...selected, opt.value];
       commitSelection(next);
       // Stay open, clear query, keep focus in input.
       setQuery('');
@@ -439,9 +437,7 @@ export function Combobox(props: ComboboxProps) {
             <Tag
               key={value}
               onRemove={
-                disabled
-                  ? undefined
-                  : () => commitSelection(selected.filter((v) => v !== value))
+                disabled ? undefined : () => commitSelection(selected.filter((v) => v !== value))
               }
             >
               {labelFor(value) || value}

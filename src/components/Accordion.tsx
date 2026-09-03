@@ -1,6 +1,6 @@
+import { ChevronDown } from 'lucide-react';
 import React, { createContext, useContext, useCallback, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { ChevronDown } from 'lucide-react';
 
 interface AccordionContextValue {
   isOpen: (value: string) => boolean;

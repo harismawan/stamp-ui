@@ -1,8 +1,8 @@
-import { test, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, expect, mock, test } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Checkbox } from '../src/components/Checkbox';
+import { renderWithTheme } from './util';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test would trip "Found multiple elements" in the full suite.
@@ -17,7 +17,7 @@ test('Checkbox renders its label and associates it with the input', () => {
 
 test('Checkbox fires onChange(true) when clicked while unchecked', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: boolean) => {});
+  const onChange = mock((_v: boolean) => {});
   renderWithTheme(<Checkbox checked={false} onChange={onChange} label="Accept terms" />);
   await user.click(screen.getByLabelText('Accept terms'));
   expect(onChange).toHaveBeenCalledTimes(1);
@@ -26,7 +26,7 @@ test('Checkbox fires onChange(true) when clicked while unchecked', async () => {
 
 test('Checkbox fires onChange(false) when clicked while checked', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: boolean) => {});
+  const onChange = mock((_v: boolean) => {});
   renderWithTheme(<Checkbox checked={true} onChange={onChange} label="Accept terms" />);
   await user.click(screen.getByLabelText('Accept terms'));
   expect(onChange.mock.calls[0][0]).toBe(false);
@@ -34,7 +34,7 @@ test('Checkbox fires onChange(false) when clicked while checked', async () => {
 
 test('Checkbox does not fire onChange when disabled', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: boolean) => {});
+  const onChange = mock((_v: boolean) => {});
   renderWithTheme(<Checkbox checked={false} onChange={onChange} label="Accept terms" disabled />);
   const input = screen.getByLabelText('Accept terms') as HTMLInputElement;
   expect(input.disabled).toBe(true);

@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor, fireEvent, within } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { DataTable, type DataTableColumn } from '../src/components/DataTable';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -200,9 +200,7 @@ describe('DataTable', () => {
     // The mixed state must also be visible to sighted users: the box renders a
     // dash glyph (lucide Minus) rather than appearing fully unchecked.
     const selectAllLabel = selectAll.closest('label') as HTMLElement;
-    await waitFor(() =>
-      expect(selectAllLabel.querySelector('svg.lucide-minus')).not.toBeNull(),
-    );
+    await waitFor(() => expect(selectAllLabel.querySelector('svg.lucide-minus')).not.toBeNull());
     expect(selectAllLabel.querySelector('svg.lucide-check')).toBeNull();
 
     // Select all -> every key selected, no longer indeterminate.

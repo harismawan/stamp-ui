@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Alert } from '../src/components/Alert';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 

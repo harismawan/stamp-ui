@@ -1,3 +1,4 @@
+import { FloatingPortal } from '@floating-ui/react';
 import { AlertTriangle, CheckCircle2, Info, XCircle } from 'lucide-react';
 import type { ComponentType } from 'react';
 import styled, { keyframes } from 'styled-components';
@@ -99,16 +100,18 @@ const iconMap: Record<ToastKind, ComponentType<{ size?: number }>> = {
 export function ToastViewport() {
   const toasts = useToastStore((s) => s.toasts);
   return (
-    <Stack aria-live="polite">
-      {toasts.map((t) => {
-        const Icon = iconMap[t.kind] ?? iconMap.info;
-        return (
-          <ColoredPill key={t.id} $kind={t.kind}>
-            <Icon size={18} />
-            <span>{t.msg}</span>
-          </ColoredPill>
-        );
-      })}
-    </Stack>
+    <FloatingPortal>
+      <Stack aria-live="polite">
+        {toasts.map((t) => {
+          const Icon = iconMap[t.kind] ?? iconMap.info;
+          return (
+            <ColoredPill key={t.id} $kind={t.kind}>
+              <Icon size={18} />
+              <span>{t.msg}</span>
+            </ColoredPill>
+          );
+        })}
+      </Stack>
+    </FloatingPortal>
   );
 }

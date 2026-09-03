@@ -1,6 +1,6 @@
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface PaginationProps {
   page: number;

@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
+import { Card, CardTitle, CardValue } from '../src/components/Card';
 // Note: extensionless paths — repo tsconfig.json (`bunx tsc`) lacks
 // `allowImportingTsExtensions`, so `.tsx` import suffixes fail TS5097 there.
 import { renderWithTheme } from './util';
-import { Card, CardTitle, CardValue } from '../src/components/Card';
 
 // Shared happy-dom document across the suite — unmount after each test so
 // sibling renders don't accumulate in the global tree (see Button.test.tsx).

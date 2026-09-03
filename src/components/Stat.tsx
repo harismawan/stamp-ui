@@ -1,6 +1,6 @@
+import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import React from 'react';
 import styled from 'styled-components';
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 export type StatDeltaType = 'up' | 'down' | 'auto';
 

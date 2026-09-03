@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 export interface SliderProps
-  extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'type' | 'value' | 'min' | 'max' | 'step'> {
+  extends Omit<
+    React.ComponentPropsWithoutRef<'input'>,
+    'onChange' | 'type' | 'value' | 'min' | 'max' | 'step'
+  > {
   value: number;
   onChange: (value: number) => void;
   min?: number;

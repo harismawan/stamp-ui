@@ -1,9 +1,9 @@
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { ChevronUp, ChevronDown } from 'lucide-react';
-import { Table, THead, TBody, Tr, Th, Td } from './Table';
 import { Checkbox } from './Checkbox';
 import { Pagination } from './Pagination';
+import { TBody, THead, Table, Td, Th, Tr } from './Table';
 
 export interface DataTableColumn<T> {
   key: string;

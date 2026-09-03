@@ -42,7 +42,11 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ({ src, name, size = 40, ...rest }, ref) => {
     return (
       <Root ref={ref} $size={size} {...rest}>
-        {src != null ? <Img src={src} alt={name} /> : <span aria-hidden="true">{initials(name)}</span>}
+        {src != null ? (
+          <Img src={src} alt={name} />
+        ) : (
+          <span aria-hidden="true">{initials(name)}</span>
+        )}
       </Root>
     );
   },

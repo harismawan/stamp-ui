@@ -29,9 +29,9 @@ function luminance(hex: string): number {
           .map((c) => c + c)
           .join('')
       : m.padEnd(6, '0').slice(0, 6);
-  const r = parseInt(full.slice(0, 2), 16) / 255;
-  const g = parseInt(full.slice(2, 4), 16) / 255;
-  const b = parseInt(full.slice(4, 6), 16) / 255;
+  const r = Number.parseInt(full.slice(0, 2), 16) / 255;
+  const g = Number.parseInt(full.slice(2, 4), 16) / 255;
+  const b = Number.parseInt(full.slice(4, 6), 16) / 255;
   const lin = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
   return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 }

@@ -1,7 +1,7 @@
-import { describe, it, expect, afterEach } from 'bun:test';
-import { screen, fireEvent, cleanup } from '@testing-library/react';
-import { renderWithTheme } from './util';
+import { afterEach, describe, expect, it } from 'bun:test';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { Accordion, AccordionItem } from '../src/components/Accordion';
+import { renderWithTheme } from './util';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test would trip "Found multiple elements" in the full suite.

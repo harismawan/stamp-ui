@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Command, type CommandItem } from '../src/components/Command';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -210,12 +210,7 @@ describe('Command', () => {
     // getAllByRole returns options in DOM order:
     // LooseOne, LooseTwo (ungrouped), then Alpha (Files), then Beta (Edit).
     const options = screen.getAllByRole('option');
-    expect(options.map((o) => o.textContent)).toEqual([
-      'LooseOne',
-      'LooseTwo',
-      'Alpha',
-      'Beta',
-    ]);
+    expect(options.map((o) => o.textContent)).toEqual(['LooseOne', 'LooseTwo', 'Alpha', 'Beta']);
 
     // Active starts on the first rendered option.
     await waitFor(() => expect(input.getAttribute('aria-activedescendant')).toBe(options[0].id));

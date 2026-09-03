@@ -1,6 +1,6 @@
+import { ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { ChevronRight } from 'lucide-react';
 
 const Nav = styled.nav`
   font-family: ${(p) => p.theme.font.body};

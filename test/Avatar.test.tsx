@@ -1,7 +1,7 @@
-import { test, expect, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
-import { renderWithTheme } from './util';
+import { afterEach, expect, test } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import { Avatar, AvatarGroup } from '../src/components/Avatar';
+import { renderWithTheme } from './util';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test would trip "Found multiple elements" in the full suite.

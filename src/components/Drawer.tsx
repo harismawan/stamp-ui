@@ -1,5 +1,12 @@
-import * as React from 'react';
-import { createPortal } from 'react-dom';
+import {
+  FloatingFocusManager,
+  FloatingOverlay,
+  FloatingPortal,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from '@floating-ui/react';
+import type * as React from 'react';
 import styled from 'styled-components';
 
 export type DrawerSide = 'left' | 'right' | 'top' | 'bottom';
@@ -12,9 +19,7 @@ export interface DrawerProps {
   children: React.ReactNode;
 }
 
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
+const Overlay = styled(FloatingOverlay)`
   background: ${(p) => p.theme.colors.overlay};
   z-index: 1100;
   display: flex;
@@ -79,49 +84,44 @@ const Body = styled.div`
 `;
 
 export function Drawer({ open, onClose, side = 'right', title, children }: DrawerProps) {
-  const panelRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [open, onClose]);
-
-  React.useEffect(() => {
-    if (open && panelRef.current) {
-      panelRef.current.focus();
-    }
-  }, [open]);
+  const { refs, context } = useFloating({
+    open,
+    onOpenChange: (next) => {
+      if (!next) onClose();
+    },
+  });
+  // Escape only — the overlay's own mousedown handler covers outside presses.
+  const { getFloatingProps } = useInteractions([useDismiss(context, { outsidePress: false })]);
 
   if (!open) return null;
 
-  return createPortal(
-    <Overlay
-      data-testid="drawer-overlay"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
-      <Panel
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        data-side={side}
-        $side={side}
-        tabIndex={-1}
-        onMouseDown={(e) => e.stopPropagation()}
+  return (
+    <FloatingPortal>
+      <Overlay
+        lockScroll
+        data-testid="drawer-overlay"
+        onMouseDown={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
       >
-        {title && <Header>{title}</Header>}
-        <Body>{children}</Body>
-      </Panel>
-    </Overlay>,
-    document.body,
+        <FloatingFocusManager context={context}>
+          <Panel
+            ref={refs.setFloating}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            data-side={side}
+            $side={side}
+            tabIndex={-1}
+            {...getFloatingProps({
+              onMouseDown: (e) => e.stopPropagation(),
+            })}
+          >
+            {title && <Header>{title}</Header>}
+            <Body>{children}</Body>
+          </Panel>
+        </FloatingFocusManager>
+      </Overlay>
+    </FloatingPortal>
   );
 }

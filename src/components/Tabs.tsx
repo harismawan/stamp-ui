@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useCallback,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { createContext, useContext, useCallback, useMemo, useRef } from 'react';
 import styled from 'styled-components';
 
 interface TabsContextValue {
@@ -144,8 +138,7 @@ const StyledTab = styled.button<{ $active: boolean }>`
   }
 `;
 
-export interface TabProps
-  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'value'> {
+export interface TabProps extends Omit<React.ComponentPropsWithoutRef<'button'>, 'value'> {
   value: string;
   children: React.ReactNode;
 }
@@ -238,8 +231,7 @@ const StyledTabPanel = styled.div`
   }
 `;
 
-export interface TabPanelProps
-  extends Omit<React.ComponentPropsWithoutRef<'div'>, 'value'> {
+export interface TabPanelProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'value'> {
   value: string;
   children: React.ReactNode;
 }

@@ -1,8 +1,8 @@
-import { test, expect, mock, afterEach } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, expect, mock, test } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Radio, RadioGroup } from '../src/components/Radio';
+import { renderWithTheme } from './util';
 
 // Testing Library does not auto-cleanup under bun:test, so stale DOM from a
 // prior test would trip "Found multiple elements" in the full suite.
@@ -34,7 +34,7 @@ test('RadioGroup checks only the radio matching value', () => {
 
 test('selecting a radio fires onChange with that value', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: string) => {});
+  const onChange = mock((_v: string) => {});
   renderWithTheme(
     <RadioGroup name="plan" value="a" onChange={onChange}>
       <Radio value="a" label="Plan A" />
@@ -48,7 +48,7 @@ test('selecting a radio fires onChange with that value', async () => {
 
 test('disabled Radio is disabled and does not fire onChange when clicked', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: string) => {});
+  const onChange = mock((_v: string) => {});
   renderWithTheme(
     <RadioGroup name="plan" value="a" onChange={onChange}>
       <Radio value="a" label="Plan A" />
@@ -63,7 +63,7 @@ test('disabled Radio is disabled and does not fire onChange when clicked', async
 
 test('arrow-key navigation moves selection to the next radio and fires onChange', async () => {
   const user = userEvent.setup();
-  const onChange = mock((v: string) => {});
+  const onChange = mock((_v: string) => {});
   renderWithTheme(
     <RadioGroup name="plan" value="a" onChange={onChange}>
       <Radio value="a" label="Plan A" />

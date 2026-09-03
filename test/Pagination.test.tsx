@@ -1,8 +1,8 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import { screen, cleanup } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithTheme } from './util';
 import { Pagination } from '../src/components/Pagination';
+import { renderWithTheme } from './util';
 
 afterEach(cleanup);
 
@@ -18,12 +18,16 @@ describe('Pagination', () => {
 
   it('disables the previous button on the first page', () => {
     renderWithTheme(<Pagination page={1} pageCount={5} onChange={() => {}} />);
-    expect((screen.getByRole('button', { name: /previous/i }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: /previous/i }) as HTMLButtonElement).disabled).toBe(
+      true,
+    );
   });
 
   it('disables the next button on the last page', () => {
     renderWithTheme(<Pagination page={5} pageCount={5} onChange={() => {}} />);
-    expect((screen.getByRole('button', { name: /next/i }) as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByRole('button', { name: /next/i }) as HTMLButtonElement).disabled).toBe(
+      true,
+    );
   });
 
   it('marks the active page with aria-current', () => {

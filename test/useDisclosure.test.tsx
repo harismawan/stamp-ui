@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'bun:test';
-import { renderHook, act } from '@testing-library/react';
+import { describe, expect, it } from 'bun:test';
+import { act, renderHook } from '@testing-library/react';
 import { useDisclosure } from '../src/hooks/useDisclosure';
 
 describe('useDisclosure', () => {

@@ -1,9 +1,9 @@
-import { describe, it, expect, afterEach, mock } from 'bun:test';
-import * as React from 'react';
-import { screen, cleanup, waitFor, fireEvent, within } from '@testing-library/react';
+import { afterEach, describe, expect, it, mock } from 'bun:test';
+import { cleanup, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import * as React from 'react';
+import { type TreeNode, TreeView } from '../src/components/TreeView';
 import { renderWithTheme } from './util';
-import { TreeView, type TreeNode } from '../src/components/TreeView';
 
 afterEach(cleanup);
 
@@ -184,7 +184,9 @@ describe('TreeView', () => {
   it('does not select a disabled node', async () => {
     const user = userEvent.setup();
     const onSelect = mock((_id: string) => {});
-    renderWithTheme(<TreeView nodes={nodes} defaultExpandedIds={['veggies']} onSelect={onSelect} />);
+    renderWithTheme(
+      <TreeView nodes={nodes} defaultExpandedIds={['veggies']} onSelect={onSelect} />,
+    );
     const potato = screen.getByRole('treeitem', { name: /Potato/ });
     expect(potato.getAttribute('aria-disabled')).toBe('true');
     await user.click(potato);
@@ -239,17 +241,15 @@ describe('TreeView', () => {
     // scoped to the clicked node.
     const user = userEvent.setup();
     const onSelect = mock((_id: string) => {});
-    renderWithTheme(
-      <TreeView nodes={nodes} defaultExpandedIds={['fruits']} onSelect={onSelect} />,
-    );
+    renderWithTheme(<TreeView nodes={nodes} defaultExpandedIds={['fruits']} onSelect={onSelect} />);
     const apple = screen.getByRole('treeitem', { name: /Apple/ });
     await user.click(apple);
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(onSelect).toHaveBeenCalledWith('apple');
     await waitFor(() => expect(apple.getAttribute('aria-selected')).toBe('true'));
-    expect(
-      screen.getByRole('treeitem', { name: /Fruits/ }).getAttribute('aria-selected'),
-    ).toBe('false');
+    expect(screen.getByRole('treeitem', { name: /Fruits/ }).getAttribute('aria-selected')).toBe(
+      'false',
+    );
   });
 
   it('a keydown on a child does not also trigger its ancestor handler', async () => {

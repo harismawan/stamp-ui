@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { darkTheme, lightTheme, type Theme } from '../src/theme';
+import { type Theme, darkTheme, lightTheme } from '../src/theme';
 
 // Static contract lock (checked by `tsc`, not at runtime): both themes must be
 // assignable to the public `Theme` type. This catches the literal-narrowing
@@ -29,11 +29,32 @@ test('light and dark themes share identical key structure', () => {
 
 test('themes expose the contract color tokens', () => {
   const required: Array<keyof Theme['colors']> = [
-    'primary', 'primaryHover', 'primaryActive', 'primarySoft', 'primaryInk',
-    'accent', 'accentDark', 'income', 'incomeSoft', 'expense', 'expenseSoft',
-    'bg', 'bgAlt', 'surface', 'surfaceMuted', 'surfaceSunken',
-    'text', 'textMuted', 'textSubtle', 'border', 'borderSoft', 'borderStrong',
-    'success', 'danger', 'warning', 'overlay',
+    'primary',
+    'primaryHover',
+    'primaryActive',
+    'primarySoft',
+    'primaryInk',
+    'accent',
+    'accentDark',
+    'income',
+    'incomeSoft',
+    'expense',
+    'expenseSoft',
+    'bg',
+    'bgAlt',
+    'surface',
+    'surfaceMuted',
+    'surfaceSunken',
+    'text',
+    'textMuted',
+    'textSubtle',
+    'border',
+    'borderSoft',
+    'borderStrong',
+    'success',
+    'danger',
+    'warning',
+    'overlay',
   ];
   for (const key of required) {
     expect(typeof lightTheme.colors[key]).toBe('string');

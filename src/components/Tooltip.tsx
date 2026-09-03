@@ -1,19 +1,19 @@
-import * as React from 'react';
-import styled from 'styled-components';
 import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
   FloatingPortal,
   type Placement,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole,
 } from '@floating-ui/react';
+import * as React from 'react';
+import styled from 'styled-components';
 
 export interface TooltipProps {
   content: React.ReactNode;
@@ -52,12 +52,7 @@ export function Tooltip({ content, placement = 'top', children }: TooltipProps) 
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    focus,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 
   const child = React.Children.only(children);
 
@@ -72,11 +67,7 @@ export function Tooltip({ content, placement = 'top', children }: TooltipProps) 
       )}
       {open && (
         <FloatingPortal>
-          <TooltipBubble
-            ref={refs.setFloating}
-            style={floatingStyles}
-            {...getFloatingProps()}
-          >
+          <TooltipBubble ref={refs.setFloating} style={floatingStyles} {...getFloatingProps()}>
             {content}
           </TooltipBubble>
         </FloatingPortal>

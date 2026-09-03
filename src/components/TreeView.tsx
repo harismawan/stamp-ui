@@ -1,6 +1,6 @@
+import { ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import styled from 'styled-components';
-import { ChevronRight } from 'lucide-react';
 
 export interface TreeNode {
   id: string;
@@ -312,11 +312,7 @@ export function TreeView({
   // ARIA ownership mirrors the tree hierarchy: tree -> treeitem -> group ->
   // treeitem. `parentId` is threaded through so ArrowLeft can move to the parent
   // treeitem.
-  const renderNodes = (
-    list: TreeNode[],
-    level: number,
-    parentId: string | null,
-  ): React.ReactNode =>
+  const renderNodes = (list: TreeNode[], level: number, parentId: string | null): React.ReactNode =>
     list.map((node) => {
       const hasChildren = Array.isArray(node.children) && node.children.length > 0;
       const isExpanded = hasChildren && expandedSet.has(node.id);
