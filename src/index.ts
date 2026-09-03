@@ -246,6 +246,15 @@ export {
   type TopNavActionsProps,
 } from './components/TopNav';
 export {
+  SideNav,
+  SideNavSection,
+  SideNavItem,
+  type SideNavProps,
+  type SideNavSectionProps,
+  type SideNavItemProps,
+} from './components/SideNav';
+export { ButtonGroup, type ButtonGroupProps } from './components/ButtonGroup';
+export {
   Footer,
   FooterColumn,
   type FooterProps,
