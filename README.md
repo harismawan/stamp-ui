@@ -1,8 +1,15 @@
 # @harismawan/stamp-ui
 
+[![npm](https://img.shields.io/npm/v/@harismawan/stamp-ui.svg)](https://www.npmjs.com/package/@harismawan/stamp-ui)
+[![license](https://img.shields.io/npm/l/@harismawan/stamp-ui.svg)](./LICENSE)
+
 A brand-agnostic React component library in the **"stamp" aesthetic** — chunky 2px
 borders, hard offset shadows, flat fills, no gradients. Built with TypeScript +
 styled-components.
+
+**[Live gallery](https://stamp-ui.harismawan.com)** · **[Component reference](./USAGE.md)**
+
+[![stamp-ui component gallery](./docs/hero.png)](https://stamp-ui.harismawan.com)
 
 ## Install
 
@@ -76,9 +83,9 @@ bunx vite --config example/vite.config.ts example   # visual gallery of every co
 
 ## Publishing
 
-Releases publish on a `v*` git tag via `.github/workflows/release.yml`. The repo
-needs an `NPM_TOKEN` secret (an npm automation token with publish rights to the
-`@harismawan` scope).
+Releases publish on a `v*` git tag via `.github/workflows/release.yml`, using npm
+[trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC) — no token
+secret required.
 
 ## License
 
