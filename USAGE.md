@@ -210,6 +210,20 @@ A clickable action element. Variants and sizes are set through styled-components
 
 Props: `$variant?: 'primary' | 'ghost' | 'outline' | 'danger' | 'link'` (default `'primary'`), `$size?: 'sm' | 'md' | 'lg'` (default `'md'`), `$full?: boolean` (full width). The `link` variant strips the surface/border/stamp and renders an inline, accent-colored text link (underlines on hover). Renders a `<button>` (default `type="button"`); accepts all native button props (`onClick`, `disabled`, etc.).
 
+### ButtonGroup
+
+Joins adjacent buttons into a single slab. Every `Button` carries a 2px border and a hard offset shadow, so a plain row reads as a doubled 4px seam with each button casting onto its neighbour — `ButtonGroup` collapses that seam, squares the interior corners, and moves the shadow onto the group so the row presses as one unit. Purely visual: for a group that tracks which option is chosen, use [`SegmentedControl`](#segmentedcontrol) or [`ChipGroup`](#chipgroup).
+
+```tsx
+<ButtonGroup aria-label="Text alignment">
+  <Button $variant="outline" onClick={() => align("left")}>Left</Button>
+  <Button $variant="outline" onClick={() => align("center")}>Center</Button>
+  <Button $variant="outline" onClick={() => align("right")}>Right</Button>
+</ButtonGroup>
+```
+
+Children are targeted by CSS rather than cloned, so anything nests — `Button`, a plain `<button>`, or an `<a>`. Props: `orientation?: 'horizontal' | 'vertical'` (default `'horizontal'`); accepts all native div props. Renders `role="group"`, so pass `aria-label` when the grouping isn't clear from context.
+
 ### Input, Select, Textarea, FieldWrap, FieldLabel, FieldError
 
 The field composition primitives. `Input`/`Select`/`Textarea` are styled native form controls. `FieldWrap` is a `<label>` column that groups a `FieldLabel`, a control, and an optional `FieldError` message. Compose them for a labelled, validated field.
@@ -588,6 +602,18 @@ A centered placeholder for empty lists or zero-result screens, with an optional 
 ```
 
 Props: `title: React.ReactNode` (required), `icon?: React.ReactNode`, `description?: React.ReactNode`, `action?: React.ReactNode`. Extends native `div` props (except `title`).
+
+### Kbd
+
+A keycap for keyboard shortcut hints. Renders a `<kbd>` with the stamp treatment — border, sunken fill, small offset shadow. `Command` uses it for its per-item `shortcut`.
+
+```tsx
+<HStack $gap={4}>
+  Press <Kbd>⌘</Kbd><Kbd>K</Kbd> to open the command palette.
+</HStack>
+```
+
+Props: `children?: React.ReactNode`. Extends native `kbd` props.
 
 ### Divider
 
@@ -1086,6 +1112,42 @@ function BasicDateRangePicker() {
 
 Props: `value?: DateRange` and `onChange?: (range: DateRange) => void` (controlled), or `defaultValue?: DateRange` (uncontrolled), where `DateRange = { start: Date | null; end: Date | null }`; `min?: Date`, `max?: Date`; `clearable?: boolean` (default `false`); `format?: (date: Date) => string` (per-date label formatter); `weekStartsOn?: 0 | 1` (default `0`); `placeholder?: string` (default `"Select range"`); `disabled?: boolean`; `id?: string`.
 
+### Calendar
+
+An always-visible month grid — the same calendar `DatePicker` shows in its popover, without the popover. Use it for booking views, availability grids, or anywhere a date is chosen inline rather than through a field.
+
+```tsx
+function BookingCalendar() {
+  const [date, setDate] = React.useState<Date | null>(null);
+  return (
+    <Calendar
+      value={date}
+      onChange={setDate}
+      min={new Date()}
+      weekStartsOn={1}
+    />
+  );
+}
+```
+
+Arrow keys move a roving focus through the grid and follow it into the neighbouring month; the header's prev/next buttons jump a month at a time.
+
+Props: `value?: Date | null` and `onChange?: (date: Date) => void` (controlled), or `defaultValue?: Date | null` (uncontrolled); `defaultMonth?: Date` (month shown on first render — defaults to the selection, else today); `min?: Date | null`, `max?: Date | null` (days outside the range render disabled); `weekStartsOn?: 0 | 1` (default `0` = Sunday); `id?: string`; `className?: string`.
+
+### Date helpers
+
+The date utilities behind `Calendar` and the pickers are exported so you can build bounds and comparisons without pulling in a date library. All of them work on local midnight and never mutate their arguments.
+
+```tsx
+import { addMonths, isWithin, startOfMonth } from "@harismawan/stamp-ui";
+
+const thisMonth = startOfMonth(new Date());
+const nextQuarter = addMonths(thisMonth, 3);
+const bookable = isWithin(candidate, thisMonth, nextQuarter);
+```
+
+`startOfMonth(d)`, `addMonths(d, n)`, `isSameDay(a, b)`, `isBefore(a, b)`, `isAfter(a, b)`, `isWithin(d, min?, max?)`, `monthLabel(month)` (localized `"June 2024"`).
+
 ## Layout
 
 All layout primitives are `styled-components` and take **transient `$`-prefixed props** (these are not forwarded to the DOM). Spacing/radius/color props are keyed to the theme tokens (`theme.space`, `theme.radii`, `theme.colors`).
@@ -1146,6 +1208,27 @@ A centered, max-width wrapper with horizontal page padding. Use it to constrain 
 ```
 
 Props (`ContainerProps`): `$max?: number` (max width in px, default `1120`). Horizontal padding is applied automatically from the theme.
+
+### VisuallyHidden
+
+Content removed from the visual layer but kept in the accessibility tree and still focusable. Use it for text that only screen readers need — a label for an icon-only control, or extra context on a link.
+
+```tsx
+<Button onClick={remove}>
+  <Trash2 size={16} aria-hidden="true" />
+  <VisuallyHidden>Delete invoice</VisuallyHidden>
+</Button>
+```
+
+Also exported as a `css` block, `visuallyHidden`, for the case where the hidden element has to be a specific tag — hiding a real `<input>` under custom-painted UI is what `Checkbox`, `Radio`, `Switch`, and `FileUpload` all do internally.
+
+```tsx
+const HiddenInput = styled.input`
+  ${visuallyHidden}
+`;
+```
+
+`VisuallyHidden` is a styled `span` and extends native span props. Do not use either for content that should be hidden from everyone — that's `display: none`.
 
 ---
 
@@ -1398,6 +1481,41 @@ Props:
 - `TopNav`: `logo?: React.ReactNode`; `center?: React.ReactNode` (center slot, stays visible on mobile); `sticky?: boolean` (default `true`; applies `position: sticky; top: 0`); `collapseAt?: number` (px breakpoint below which links/actions collapse into the drawer, default `880`); `mobileTitle?: string` (drawer title, default `'Menu'`); `children?: React.ReactNode`. Spreads remaining `header` props.
 - `TopNavLinks`: styled `nav` — style anchor tags inside it for nav links.
 - `TopNavActions`: `children: React.ReactNode` (required). Spreads remaining `div` props. Use for CTA buttons or icon buttons.
+
+### SideNav, SideNavSection, SideNavItem
+
+Persistent dashboard sidebar: logo, sections of items, optional pinned footer. Below `collapseAt` px the rail hides and a hamburger opens the same contents in a `Drawer`. Like `TopNav`, children render in both the rail and the drawer — avoid `id`/`htmlFor` attributes on them to prevent duplicate-id markup.
+
+```tsx
+<SideNav logo={<strong>Acme</strong>} footer={<Avatar name="Ada Lovelace" size={32} />}>
+  <SideNavSection title="Main">
+    <SideNavItem href="/dashboard" icon={<LayoutGrid size={18} />} active>
+      Dashboard
+    </SideNavItem>
+    <SideNavItem href="/orders" icon={<Package size={18} />} badge="12">
+      Orders
+    </SideNavItem>
+  </SideNavSection>
+  <SideNavSection title="Settings">
+    <SideNavItem href="/team" icon={<Users size={18} />}>Team</SideNavItem>
+  </SideNavSection>
+</SideNav>
+```
+
+Items are router-agnostic: you set `active` yourself, so the URL stays the source of truth. Use `as` to swap the underlying element for a router link.
+
+```tsx
+import Link from "next/link";
+
+<SideNavItem as={Link} href="/orders" active={pathname === "/orders"}>
+  Orders
+</SideNavItem>
+```
+
+Props:
+- `SideNav`: `logo?: React.ReactNode`; `footer?: React.ReactNode` (pinned below the scrolling list); `width?: number` (px, default `260`); `sticky?: boolean` (default `true`; applies `position: sticky; top: 0; height: 100vh`); `collapseAt?: number` (px breakpoint, default `880`); `mobileTitle?: string` (drawer title, default `'Menu'`); `children?: React.ReactNode`. Spreads remaining `aside` props.
+- `SideNavSection`: `title?: string` (uppercase heading; also labels the section's `nav` landmark via `aria-labelledby`); `children?: React.ReactNode`. Spreads remaining `div` props.
+- `SideNavItem`: `icon?: React.ReactNode` (rendered `aria-hidden`); `badge?: React.ReactNode` (trailing count or status pill); `active?: boolean` (default `false`; sets `aria-current="page"` and the filled treatment); `as?: React.ElementType` (default `'a'`); `children?: React.ReactNode`. Spreads remaining anchor props.
 
 ### Footer
 
