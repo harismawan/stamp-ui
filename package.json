@@ -3,6 +3,15 @@
   "version": "0.4.7",
   "description": "Stamp-aesthetic React component library — chunky borders, hard offset shadows, no gradients.",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "component-library",
+    "design-system",
+    "ui-components",
+    "styled-components",
+    "typescript",
+    "neobrutalism"
+  ],
   "author": "Harismawan <mail@harismawan.com>",
   "repository": {
     "type": "git",
