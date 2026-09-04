@@ -24,7 +24,7 @@ const Rail = styled.aside<{ $width: number; $sticky: boolean; $collapseAt: numbe
   gap: ${(p) => p.theme.space[5]};
   width: ${(p) => p.$width}px;
   flex-shrink: 0;
-  padding: ${(p) => p.theme.space[5]} ${(p) => p.theme.space[4]};
+  padding: ${(p) => p.theme.space[5]};
   font-family: ${(p) => p.theme.font.body};
   background: ${(p) => p.theme.colors.surface};
   border-right: 2px solid ${(p) => p.theme.colors.border};
@@ -59,8 +59,8 @@ const Scroll = styled.div`
 
 const FooterSlot = styled.div`
   flex-shrink: 0;
-  padding-top: ${(p) => p.theme.space[4]};
-  border-top: 2px solid ${(p) => p.theme.colors.borderSoft};
+  padding-top: ${(p) => p.theme.space[3]};
+  border-top: 2px solid ${(p) => p.theme.colors.border};
 `;
 
 const Hamburger = styled.button<{ $collapseAt: number }>`
@@ -152,19 +152,24 @@ const ItemRoot = styled.a<{ $active: boolean }>`
   padding: ${(p) => p.theme.space[2]} ${(p) => p.theme.space[3]};
   font-family: inherit;
   font-size: 0.9375rem;
-  font-weight: 700;
+  /* Inactive items sit back so the active one is the only full-contrast row. */
+  font-weight: ${(p) => (p.$active ? 700 : 600)};
   text-align: left;
   text-decoration: none;
   cursor: pointer;
+  /* Transparent border on inactive items keeps the row from shifting on activate. */
   border: 2px solid ${(p) => (p.$active ? p.theme.colors.border : 'transparent')};
   border-radius: ${(p) => p.theme.radii.md};
-  color: ${(p) => (p.$active ? p.theme.colors.primaryInk : p.theme.colors.text)};
+  color: ${(p) => (p.$active ? p.theme.colors.primaryInk : p.theme.colors.textMuted)};
   background: ${(p) => (p.$active ? p.theme.colors.primary : 'transparent')};
-  box-shadow: ${(p) => (p.$active ? p.theme.shadow.stampSm : 'none')};
-  transition: background 80ms ${(p) => p.theme.easing.out};
+  transition:
+    background 80ms ${(p) => p.theme.easing.out},
+    color 80ms ${(p) => p.theme.easing.out},
+    border-color 80ms ${(p) => p.theme.easing.out};
 
   &:hover {
     background: ${(p) => (p.$active ? p.theme.colors.primary : p.theme.colors.surfaceMuted)};
+    color: ${(p) => (p.$active ? p.theme.colors.primaryInk : p.theme.colors.text)};
   }
 
   &:focus-visible {
